@@ -100,10 +100,8 @@ We use SemVer for versioning. For the versions available, see the tags on this r
 
 # Authors / 著者
 
-Billie Thompson - Initial work / 原著者 - PurpleBooth
-See also the list of contributors who participated in this project.
-
-このプロジェクトへの貢献者のリストもご覧ください。
+TsurunaiGO team
++ tsurumaigo@manage.nitech.ac.jp
 
 # License / ライセンス
 
