@@ -15,7 +15,7 @@ For the versions available, see the tags on this repository.
 
 # /バグ報告、機能リクエストについて
 
-
+バグ報告、機能リクエストはテンプレートに従ってissueを発行してください。
 
 # Authors / 著者
 
