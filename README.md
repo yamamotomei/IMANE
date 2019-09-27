@@ -113,7 +113,5 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 # Acknowledgments / 謝辞
 
-+ Hat tip to anyone whose code was used / コードを書いた人への感謝
-+ Inspiration / 何からインスピレーションを得たか
-+ etc / その他
+This work was supported by Council for Science, Technology and Innovation (CSTI), Cross-ministerial Strategic Innovation Promotion Program (SIP), “Cyber-Security for Critical Infrastructure” (funding agency: NEDO). 
 
