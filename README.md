@@ -105,14 +105,15 @@ See also the list of contributors who participated in this project.
 
 このプロジェクトへの貢献者のリストもご覧ください。
 
-#License / ライセンス
+# License / ライセンス
 
 This project is licensed under the MIT License - see the LICENSE.md file for details
 
 このプロジェクトは MIT ライセンスの元にライセンスされています。 詳細はLICENSE.mdをご覧ください。
 
-#Acknowledgments / 謝辞
+# Acknowledgments / 謝辞
 
 + Hat tip to anyone whose code was used / コードを書いた人への感謝
 + Inspiration / 何からインスピレーションを得たか
 + etc / その他
+
