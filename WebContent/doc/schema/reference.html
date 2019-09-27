@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+<title>FrICORE 利用ガイド</title>
+
+</head>
+<body>
+<h1>FrICORE 利用ガイド</h1>
+<ul>
+<li>概要</li>
+<li>データモデル</li>
+<li>スキーマリファレンス</li>
+<li>デザインシート</li>
+<li>リソース</li>
+</ul>
+<h3>システムの概要</h3>
+<h4>概要</h4>
+<p>TBD</p>
+<h4>システム構成</h4>
+<p>TBD</p>
+<h4>前提条件</h4>
+<ul>
+<li>
+<p>サーバ</p>
+<ul>
+<li>Java実行環境(Oracle JavaSE 7以降推奨)</li>
+<li>Apache Tomcat(tomcat9推奨)</li>
+<li>Windows 7以降(x64推奨)、またはMac OS X(10.10以降推奨)</li>
+</ul>
+</li>
+<li>
+<p>クライアント</p>
+<ul>
+<li>HTML5ブラウザ(chrome 65以降推奨)</li>
+<li>Windows 7以降(x64推奨)、またはMac OS X(10.10以降推奨)</li>
+</ul>
+</li>
+<li>
+<p>シナリオ開発環境</p>
+<ul>
+<li>Microsoft Excel(2010以降)</li>
+<li>開発者エディタ(Visual Studio Code 1.19以降推奨)</li>
+<li>Windows 7以降(x64 日本語版推奨)</li>
+</ul>
+</li>
+</ul>
+<h3>データモデル</h3>
+<h4>シナリオとシナリオセット</h4>
+<p>演習シナリオは、シナリオを表現する一連の雛型データの集まり(シナリオセット)によって定義されます。<br>
+システムには複数のシナリオセットを定義することができます。<br>
+同時に有効化することのできるシナリオセットは1つだけです。<br>
+シナリオセットの有効化はファシリテータコンソールから行うことができます。</p>
+<p>シナリオセットをシステムに登録するには以下のいずれかを行います。</p>
+<ul>
+<li>
+<p>サーバのシナリオセット格納先ディレクトリ配下に新規ディレクトリを作成し、シナリオデータを格納します。</p>
+<pre><code>  デフォルトでは[webアプリケーション配備先]/data/[シナリオ名]となります。  
+
+  例: %CATALINA_HOME%/webapps/workshop/data/サンプル/
+</code></pre>
+<p>シナリオセット格納先ディレクトリは、webアプリケーション起動時にシステムプロパティscenarioBaseを指定することで変更することができます。</p>
+<p>例: -DscenarioBase=c:/temp/scenarios/</p>
+</li>
+<li>
+<p>作成したシナリオデータをzipアーカイブとして結合し、ファシリテータコンソールからアップロードします。</p>
+<pre><code>  アップロードされたアーカイブは、[シナリオセット格納先]/[シナリオ名]に展開されます。[シナリオ名]には、zipファイル名から拡張子部分を除いた名前が割り当てられます。同名のシナリオがすでに登録済の場合は上書きされます。
+</code></pre>
+</li>
+</ul>
+<h4>シナリオデータの構成</h4>
+<p>1つのシナリオセットは次のデータから構成されます。</p>
+<ul>
+<li>フェーズ:setting.json - 演習シナリオの実行単位である「演習フェーズ」を定義します。一つのシナリオセットは複数のフェーズから構成されます。以下のカードは、1つ、または複数のフェーズで使用することができます。</li>
+<li>メンバ:contacts.json - シナリオに参加するユーザの役割を定義します。</li>
+<li>アクション:actions.json - シナリオにおける人やシステムの行動を表現する「アクションカード」を定義します。</li>
+<li>リプライ:replies.json - アクションに対する応答を表現する「リプライカード」を定義します。</li>
+<li>ステート:states.json - シナリオの進行を制御するための変数「ステートカード」を定義します。</li>
+<li>ポイント:points.json - 演習結果を評価(採点)するために発行される「ポイントカード」を定義します。</li>
+</ul>
+<h2>スキーマリファレンス</h2>
+<p>各シナリオデータのスキーマ定義は以下を参照してください。</p>
+<ul>
+<li><a href="static/fricore-schema-setting.html">フェーズ設定</a></li>
+<li><a href="static/fricore-schema-contacts.html">メンバ</a></li>
+<li><a href="static/fricore-schema-actions.html">アクション</a></li>
+<li><a href="static/fricore-schema-replies.html">リプライ</a></li>
+<li><a href="static/fricore-schema-states.html">ステート</a></li>
+<li><a href="static/fricore-schema-points.html">ポイント</a></li>
+</ul>
+<h2>解説</h2>
+<h3>システムの概要</h3>
+<ul>
+<li>
+<p>演習システムはWebアプリケーションとして実装され、演習サーバと演習クライアントから構成されます。</p>
+<ul>
+<li>演習実施時は、通常はサーバ用マシンと別に演習参加者/ファシリテータ用マシンを用意します。</li>
+<li>演習シナリオの開発時は、クライアントとサーバを同一マシン上で実行することもできます。</li>
+</ul>
+</li>
+<li>
+<p>演習シナリオはjson形式の「シナリオデータ」を記述することで定義します。</p>
+</li>
+<li>
+<p>実装したシナリオデータをサーバに配備し、サーブレットを起動すると、演習の準備ができます。</p>
+</li>
+<li>
+<p>演習参加者はブラウザを使用して演習画面を操作し、演習を進行します。</p>
+</li>
+<li>
+<p>ファシリテータはブラウザを使用して、シナリオの開始/中断や参加者へのアドバイスなどを行います。</p>
+</li>
+<li>
+<p>同じシナリオを複数のチームで同時進行することができます。</p>
+</li>
+</ul>
+<div class="remark">
+    * 以下の作業は演習サーバPC上で行います。
+    * 以降の操作はターミナル/コマンドプロンプトを使用して行います。
+    * tomcat9ディレクトリのパスを%CATALINA_BASE%と表記してます。必要に応じて読み替えてください。
+</div>
+<h3>サーバの起動と停止</h3>
+<h4>起動</h4>
+<ul>
+<li>以下のコマンドを実行してサーブレットを起動します。
+<code>cd /d %CATALINA_BASE% %CATALINA_BASE%\bin\startup.bat</code></li>
+<li>演習サーバの起動が完了すると、次のメッセージが表示されます。
+<code>[INFO] workshop - 2018/02/23 11:30:15: started</code></li>
+</ul>
+<h4>停止</h4>
+<ul>
+<li>以下のコマンドを実行してサーブレットを停止します。
+<code>%CATALINA_BASE%/bin/shutdown.bat</code></li>
+</ul>
+<h4>再起動</h4>
+<p>「停止」操作後に「起動」操作を行ってください。</p>
+<h3>クライアントからサーバへの接続</h3>
+<ul>
+<li>
+<p>chromeブラウザを起動します。</p>
+</li>
+<li>
+<p>次のURLにアクセスし、トップ画面に移動します。
+<code>http://[ホスト名またはIPアドレス]:8080/workshop/</code></p>
+</li>
+<li>
+<p>参加者として接続する場合</p>
+<ul>
+<li>「演習参加者はこちらから」リンクをクリックし、演習コンソールに移動</li>
+<li>ユーザID「ファシリテータ」以外を選択して「ログイン」</li>
+</ul>
+</li>
+<li>
+<p>ファシリテータとして接続する場合</p>
+<ul>
+<li>「管理者/オブザーバはこちらから」リンクをクリックし、ファシリテータコンソールに移動</li>
+<li>ユーザID「ファシリテータ」を選択して「ログイン」</li>
+</ul>
+</li>
+</ul>
+<div class="remark">補足:
+正常にログインが行えない場合は、以下を確認してください。
+<ul>
+<li>
+<p>トップ画面が表示されない場合: サーブレットが起動していない</p>
+</li>
+<li>
+<p>トップ画面は表示されるが、コンソールが表示されない場合: データが異常 (シナリオデータの記述誤り、配備ミス等)</p>
+</li>
+<li>
+<p>ユーザIDに選択肢が現れない: ユーザ定義(contacts.json)の記述誤りなど
+ログイン後のコンソール画面が正しく表示されない: シナリオデータの記述誤りなど</p>
+</li>
+</ul>
+</div>
+<h3>クライアントコンソールの概要</h3>
+<p>クライアントコンソールは、演習の実施とコントロールを行うためのweb画面です。</p>
+<p>クライアントコンソールは3つの画面から構成されます。各画面は右上のコンソールメニューから切り替えます。</p>
+<ul>
+<li>
+<p>演習コンソール
+参加者が演習を実施するために使用します。</p>
+</li>
+<li>
+<p>ファシリテータコンソール
+ファシリテータが演習をコントロールするために使用します。</p>
+</li>
+<li>
+<p>振り返り画面</p>
+</li>
+</ul>
+<p>参加者およびファシリテータが演習実施後の振り返りを行うために使用します。</p>
+<h3>演習コンソールの操作</h3>
+<p>TBD</p>
+<h3>ファシリテータコンソールの操作</h3>
+<h4>演習のコントロール:演習の開始</h4>
+<ul>
+<li>
+<p>ログイン</p>
+<p>まず、ファシリテータコンソールにファシリテータとしてログインしてください。</p>
+</li>
+<li>
+<p>フェーズの開始</p>
+<p>演習シナリオ一覧からチームとフェーズを選択して「開始」を行います。</p>
+</li>
+<li>
+<p>フェーズの終了</p>
+<p>演習シナリオ一覧からチームとフェーズを選択して「中断」を行います。</p>
+</li>
+<li>
+<p>状態を保存</p>
+<p>フェーズの状態をローカルファイル(json形式)に保存します。</p>
+</li>
+<li>
+<p>状態を復元</p>
+<p>ファイルに保存した状態を復元します。</p>
+</li>
+</ul>
+<h4>演習のコントロール:演習の進行</h4>
+<ul>
+<li>
+<p>シナリオ一覧からシナリオをクリックして選択すると、選択されたチームのシナリオ進行状況を参照できます。</p>
+<ul>
+<li>「演習シナリオ概要」では、メンバ、アクション、ステート、リプライなどのシナリオデータの内容を参照できます。</li>
+<li>「イベント履歴」ではチームメンバの行動の履歴を見ることができます。
+演習コンソールではログイン中のユーザに関する活動だけが見えていたのに対し、
+ここでは自動応答ユーザを含めたチームメンバ全員のやりとりが確認できます。</li>
+<li>「トリガ」「ステート」では、シナリオの進行に関わるシステム状態を参照することができます。</li>
+</ul>
+</li>
+<li>
+<p>「すぐに更新」ボタンを押すと表示中の情報が最新化されます。</p>
+</li>
+</ul>
+<div class="remark">補足:
+<ul>
+	<li>
+	<p>シナリオ詳細パネルの情報の多くは、フェーズを開始しないと参照できません。</p>
+	</li>
+	<li>
+	<p>表示オプション「自動的に更新する」をチェックすると、一定間隔で表示内容を最新化します。</p>
+	<p>自動更新を使用する場合は、以下の点に留意してください。</p>
+		<ul>
+		<li>処理負荷が若干高くなる</li>
+		<li>画面の操作と表示更新のタイミングが重なると「誤爆」の原因になる</li>
+		</ul>
+	</li>
+</ul>
+</div>
+<h3>演習の振り返り</h3>
+<p>フェーズ中のやりとりをシーケンス図として俯瞰することができます。<br>
+通常は終了後の振り返りに使用しますが、フェーズ開始後ならいつでも使用できます。<br>
+イベントをマウスオーバーすると、イベントの詳細がポップアップ表示されます。</p>
+<div class="remark">
+    * 表示コントロールを操作すると、表示内容の拡大・縮小、絞り込みができます。
+	「絞り込み」ボタンを押すと、表示内容の絞り込み画面が表示されます。条件を設定して「適用」ボタンを押すと、設定した内容で画面を再表示します。
+<pre><code>注)初期状態では「イベントを短縮して表示」オプションが有効になっています。無効にすると、イベントの情報がより詳細に表示されます。
+</code></pre>
+</div>
+<h3>概念と用語</h3>
+<ul>
+<li>
+<p>コントロール(コントローラ)</p>
+<ul>
+<li>演習全体の進行を制御する</li>
+<li>本プログラムでは、ファシリテータがコントローラを兼任する</li>
+</ul>
+</li>
+<li>
+<p>ファシリテート(ファシリテータ)</p>
+<ul>
+<li>演習を目的に沿って円滑に進行するため、演習の進行を監視し、必要に応じて参加者の誘導や助言、その他支援を行う</li>
+<li>本プログラムでは、演習チームごとにファシリテータを配置することを想定</li>
+</ul>
+</li>
+<li>
+<p>参加者</p>
+<ul>
+<li>演習に参加する個人(演習の受講者)</li>
+<li>本プログラムでは、演習システムにログインしてプログラムに参加する物理的な個人を示す</li>
+</ul>
+</li>
+<li>
+<p>チーム</p>
+<ul>
+<li>本プログラムでは、同じ演習シナリオに同時に参加する主体の集まりをチームと呼ぶ</li>
+<li>演習の対象となる組織(たとえば企業)と、関連する利害関係者(外部機関や集団を含む)に対応する</li>
+<li>参加者(=チームメンバ(メンバ))とファシリテータ、自動応答ユーザ(後述)からなる</li>
+</ul>
+</li>
+<li>
+<p>シナリオ</p>
+<ul>
+<li>ひとつの演習の進行を決定する一連の取り決め</li>
+</ul>
+</li>
+</ul>
+<h3>チームとフェーズ</h3>
+<p>シナリオにおけるアクターをユーザと呼びます。チームに属するユーザを指してメンバと呼ぶこともあります。</p>
+<p>ユーザはひとつの役割(ロール)を持ちます。</p>
+<p>ユーザは「参加者ユーザ」と「システムユーザ(自動応答ユーザ)」の2種類があります。</p>
+<ul>
+<li>「参加者ユーザ」は演習コンソールを使って演習に参加する個人に割り当てます。</li>
+<li>自動応答ユーザは、システムが人間に代ってその役割を演じます。
+参加者と自動応答ユーザの集まりによって、演習の対象となる組織(チーム)を構成します。</li>
+</ul>
+<p>1つの組織において、ユーザとロールは1対1に対応します。</p>
+<p>特殊なユーザとして次があります。</p>
+<ul>
+<li>ファシリテータ: チームのシナリオ進行を管理・監視し、必要に応じてアドバイスやインジェクションを行います。</li>
+<li>システム: システムからチームメンバへの一方的な通知などで使用される疑似的なユーザです。</li>
+<li>全員(all): 同上</li>
+</ul>
+<p>シナリオの進行は、1つまたは複数の「フェーズ」で構成されます。フェーズは演習の実施単位となります。</p>
+<p>先行するフェーズの状態を後発フェーズで引き継ぐことはできません。</p>
+<p>フェーズは、ファシリテータによる「フェーズの開始」操作で開始され、「フェーズの中断」操作で終了します。</p>
+<p>「フェーズの中断」は、機能としては単なる終了マーク付けであり、中断後もシナリオの進行は可能です。(振り返り/フォローアップに使用します)</p>
+<p>フェーズは、参加者の行動や時間経過に応じてシナリオの進行を制御するためのデータ要素(「カード」)の集まりから構成されます。</p>
+<p>カードには、アクション、ステート、リプライ、ポイントがあります。それぞれ次項で説明します。</p>
+<h4>イベント</h4>
+<p>シナリオはユーザ間のメッセージ(イベント)交換により進行します。</p>
+<p>イベントにはアクション(要求)とリプライ(応答)があり、イベントにはステート(引数/状態)が付属します。</p>
+<p>メッセージ交換は、アクションとリプライのセットを単位として行われます。</p>
+<p>アクションのないリプライ、リプライのないアクション、複数のリプライをもつアクションもあります。(後述)</p>
+<p>ユーザはステートを持ち、ステートはメッセージ交換によってユーザ間で伝搬します。</p>
+<p>演習システム(=演習場)もステートを持ちます(=システムステート)。</p>
+<p>システムステートは、メッセージ交換によって発生したり消滅したりします。</p>
+<h4>シナリオデータの概要:ステート</h4>
+<p>シナリオの進行に影響を及ぼす「状態」を示します。</p>
+<p>ステートは一意な番号で識別され、その番号が意味する状態がONかOFFかのいずれかを表現します。</p>
+<p>ユーザのアクションの結果や、シナリオの進行状況によって、ユーザ間およびユーザ-システム間でステートが交換され、
+それによってシナリオ進行がさらに変化します。</p>
+<p>ステートには次の2種類があります。</p>
+<ul>
+<li>
+<p>ユーザステート</p>
+<p>ユーザが所有する状態、つまりユーザが認識している状態を示します。</p>
+<p>ユーザは、システムまたは他のユーザからステートを受け取ることで初めてその状態を所有(認識)します。一般に、ユーザが認識している状態はユーザによってばらばらです。</p>
+<p>ON(入手済)かOFF(未入手)の状態をとり、OFFからONへの片方向で変化します。</p>
+</li>
+<li>
+<p>システムステート</p>
+<p>演習場となる環境全体(演習場)の「実状態」を示します。</p>
+<p>これはユーザが認識している状態とは一致していないかもしれません。ユーザはシステムステートの状態を直接参照することはできません。</p>
+<p>システムステートは演習の進行に応じて変化します。</p>
+<p>ONとOFFの状態をとり、ONとOFFの両方向で変化します。</p>
+</li>
+</ul>
+<h4>シナリオデータの概要:アクション</h4>
+<p>アクションは、ユーザの行動を示します。アクションカードを選択することで、ユーザはそのアクションに対して割り当てられた行動を実施したことになります。</p>
+<p>アクションには次の種類があります。</p>
+<ul>
+<li>
+<p>共通アクション: すべてのロールが使用できるアクション。さらに以下があります。</p>
+<ul>
+<li>報告・連絡(share): 自分が持っているステートを他のユーザに渡す(共有する)ためのアクション。コミュニケーションルールに従ったオフィシャルなコミュニケーションに相当します。</li>
+<li>相談(talk): 任意の情報交換。話し合いはいつでも誰とでも行うことができますが、個人的・非公式なコミュニケーション(立ち話)に相当し、業務上は有効性を持ちません。</li>
+</ul>
+</li>
+<li>
+<p>専用アクション(action): 特定のロールが、特定の条件のもとで使用可能になるアクション。</p>
+</li>
+<li>
+<p>自動アクション(auto): シナリオの進行に応じて、自動応答ユーザが自動的に実行するアクション。
+アクションには主体(誰が=From)と対象(誰に/何に=To)が決められています。</p>
+</li>
+</ul>
+<p>アクションは同報(=Cc)することができますが、同報先の指定はシナリオ進行に影響を与えません。</p>
+<p>(同報された人は、「アクションの対象はToで指定されたユーザであって、自分ではない」と認識します)</p>
+<p>アクションによって、他のユーザへの情報伝達や指示を行い、これに伴ってシナリオの状態変化が発生します。</p>
+<h4>シナリオデータの概要:リプライ</h4>
+<p>アクションやイベントに対する応答(結果/反応)を示します。以下の2種類があります。</p>
+<ul>
+<li>リプライ: 特定のアクションに対する応答を示します。</li>
+<li>トリガー:アクションとは無関係に、シナリオの進行に応じて発生するイベントを示します。
+原則として、アクションの種類と主体に対してリプライを定義します。(「誰が」「誰に/何に」によって「どうした/どうなった」が決定します。同じ種類のアクションであっても、誰に指示するかによって対応が変わります)。</li>
+</ul>
+<p>さらに、シナリオの進行状況(システムステート、フェーズ経過時間)に応じてリプライを変えることができます。</p>
+<p>リプライを返すことでシステムの状態(システムステート)を変化させることができます。(アクションを行った結果(リプライ)として状態が変わります。)</p>
+<h4>シナリオデータの概要:ポイント</h4>
+<p>演習結果のパフォーマンスを評価するための得点を定義します。</p>
+<p>フェーズを実施するごとに、各チームのスコアが算出されます。スコアはフェーズ進行中のポイントの累積によって決定します。</p>
+<p>システムステートが追加されたタイミングで、シナリオに定義されたポイントカードが評価され、
+取得条件が満たされればチームスコアが加点または減点されます。</p>
+<h4>シナリオデータの開発:データモデルと開発の流れ</h4>
+<p>各データは、データの種類ごとのデータファイル(json)として記述されます。</p>
+<p>実習では、デザインシートを使って演習シナリオを設計し、 マクロでjsonデータを自動生成します。</p>
+<p>作業の流れは以下のとおりです。</p>
+<ul>
+<li>
+<p>演習シナリオのプロットから、演習の実施単位(シーン)をフェーズとして切り出す</p>
+</li>
+<li>
+<p>フェーズを構成するアクター(人、モノ)を抽出する</p>
+</li>
+<li>
+<p>シナリオの内容や演習の目的などを考慮してアクターを整理・分類する</p>
+<ul>
+<li>参加者となるアクターはどれか?</li>
+<li>まとめられるアクターはないか?(たとえば、機器と機器を操作する人はまとめても良い)</li>
+</ul>
+</li>
+</ul>
+<h4>シナリオデータの開発:組織の設計と定義</h4>
+<h5>チームメンバを定義する</h5>
+<ul>
+<li>
+<p>Actorsシートに定義内容を入力</p>
+</li>
+<li>
+<p>「Create メンバー用json」ボタンを押下すると、出力先に以下のデータファイルが出力される</p>
+<ul>
+<li>setting.json</li>
+<li>contacts.json</li>
+</ul>
+</li>
+</ul>
+<p>※実習ではフェーズ=1固定となります。</p>
+<h4>シナリオデータの開発:振る舞いの設計と定義</h4>
+<p>作業の流れは以下のとおりです。</p>
+<ul>
+<li>
+<p>プロットをもとに、フェーズのおおまかな流れを書き出す</p>
+<ul>
+<li>まずは時間の進行や、進行の起点となるイベント</li>
+</ul>
+</li>
+<li>
+<p>シナリオのルートを決定する:たとえば;</p>
+<ul>
+<li>攻撃者の攻撃をストーリーの軸として、何も対策しなかった場合のバッドエンドルート</li>
+<li>演習目的・目標を踏まえて、各人が最善の行動を取った場合のベストエンドルート</li>
+</ul>
+</li>
+<li>
+<p>ルートを実装していく。まずはメインルートから</p>
+</li>
+<li>
+<p>アクターの行動・振る舞い(イベント)を書き出す</p>
+</li>
+<li>
+<p>フェーズの進行やアクターの振る舞いに影響する「状態(ステート)」を書き出す</p>
+</li>
+<li>
+<p>この人・モノは「こういうときにこう動く」をイベントとして積み上げていく</p>
+</li>
+<li>
+<p>メインルートが完成したら、ルートを増やしていく</p>
+</li>
+</ul>
+<p>イベント/振る舞いを定義する</p>
+<ul>
+<li>
+<p>Scenarioシートに定義内容を入力</p>
+</li>
+<li>
+<p>「Create シナリオ用json」ボタンを押下すると、出力先に以下のデータが出力される</p>
+<ul>
+<li>actions.json</li>
+<li>replies.json</li>
+<li>states.json</li>
+</ul>
+</li>
+</ul>
+<h4>時間経過とタイミング</h4>
+<p>シナリオはイベント駆動で進行します。</p>
+<p>イベントの発生契機は大きく以下があります。</p>
+<ul>
+<li>
+<p>ユーザによる行動(アクション)の結果として発生するイベント</p>
+</li>
+<li>
+<p>状態変化の結果として発生するイベント
+シナリオには、何らかのイベントの発生を起点とした時間の経過によって二次イベントを発生させたいケースがあります。
+これには、次のような方法があります。</p>
+</li>
+<li>
+<p>演習開始からの経過時間によって発生するトリガーイベントを定義する。</p>
+<p>イベントを発生させるタイミングが固定的である場合には最も簡単な方法です。
+半面、シナリオの進行状況に応じてタイミングを調整したい場合には適しません。</p>
+</li>
+<li>
+<p>システムステートが追加されてからの時間経過によって発生する自動アクションを定義する。
+システム(演習場)に特定の状態変化が発生した時点からの経過時間によってイベントを発生させたい場合に適します。</p>
+</li>
+<li>
+<p>基点となるアクションイベントに対し、時間遅延を設定したリプライを定義する。
+前の方法に比べ、システムステートを必要としない利点がありますが、イベントの通知先がアクションの発行元に限定されます。</p>
+</li>
+</ul>
+<p>イベントの連鎖の発生</p>
+<p>時間を選択条件に含むイベント</p>
+<p>自動応答ユーザに対するアクションへのリプライは、次のプロパティによって、応答のタイミングを制御することができます。
+&quot;timecondition&quot;:[//指定されたアクション完了後X秒後に利用可能となる
+{&quot;prerequisite&quot;:actionid,
+&quot;elapsed&quot;:10}
+],</p>
+<p>特定のアクションが実行後に、指定された時間が経過したら有効になる</p>
+<p>遅延時間が設定できます。</p>
+<p>時間経過を契機としてイベントを発生させる方法には以下があります。</p>
+<ul>
+<li>トリガーイベント - 演習開始からの経過時間に応じてリプライイベントを発生させます。<br>
+トリガーイベントは、特殊な種類のリプライとして定義します。
+</li>
+<li>自動アクション - 特定のシステムステートが追加された時点からの相対時間でアクションイベントを発生させます。
+<br>
+</li>
+</ul>
+<h3>ステートカードとシステムステート</h3>
+<p>
+<p>アクターは、イベントを介してステートカードを交換することで、インシデント情報を伝達します。<br>
+アクターは、ステートカードを入手することで、そのステートカードが示す情報を得たことになります。
+これは、参加者が次のアクションを決定するための判断材料、あるいは対応するアクションの
+使用可否を制御するための条件として機能します。</p>
+
+<p>
+一方、システムは、イベントの交換を介して「システムステート」を追加または削除されることがあります。<br>
+システムステートは演習シナリオ全体で共有される状態変数です。
+システムステートは、そのステートカードをアクターが入手済かどうかにかかわらず、シナリオの分岐などの進行に影響を与えます。<br>
+具体的には、アクションのsystemstateconditionは、自動アクションの実行を引き起こすためのフラグとして機能します。同様に、リプライのstateconditionは、特定のアクションに対してシステムステートの状態に応じてリプライを選択するためのルールとして機能します。
+これらの条件をシステムステート条件と呼びます。
+以下に例を示します。
+</p><ul>
+	<li>演習の進行により、ステートカード「設備に火災がした」がシステムステートに登録される</li>
+<li>ステートカード「設備に火災が発生した」を発生条件とする自動アクション「自動消火装置を作動する」が実行される。この自動アクションの実行により、別のステートカード「自動消火装置が作動中」がシステムステートに追加される。</li>
+<li>ステートカード「設備に火災が発生した」および「自動消火装置が作動中」を条件とし、elapsedプロパティに10が指定されたリプライ「火災が鎮火した」が10秒後に発行され、ステートカード「設備に火災が発生した」がシステムステートから削除される。</li>
+</ul>
+<p>システムステート条件は、1つ以上のシステムステートと、0または1つの論理演算子によって記述します。<br>
+システムステートを一つも指定しない場合、条件は常に真と評価されます。<br>
+システムステートを複数指定した場合、プロパティによって既定の規則に従っていずれかが選択されます。<br>
+システムステートを複数指定した場合の論理演算子を明示的に指定することができます。</p>
+<ul>
+	<li>AND - 論理積。指定されたすべてのシステムステートが有効な場合に真となります。</li>
+	<li>OR - 論理和。指定されたいずれかのシステムステートが有効な場合に真となります。</li>
+	<li>NAND - 否定論理積。指定されたいずれかのシステムステートが有効でない場合に真となります。</li>
+	<li>NOR - 否定論理和。指定されたずべてのシステムステートが有効でない場合に員となります。</li>
+	<li>NOT - 否定。指定されたシステムステートがない場合に真となります。</li>
+</ul>
+<p></p>
+<h2><a id="designsheet"></a>デザインシート</h2>
+<h3>
+概要
+</h3>
+<p>
+	デザインシートは、シナリオデータの作成を支援するためのツールです。<br>
+	Excelワークシートに必要事項を入力することで、シナリオデータを作成することができます。
+	<br>
+	デザインシートはシナリオデータの作成を簡易化するために、シナリオデータの一部の機能を制限しています。
+	</p><ul>
+		<li>デザインシートで作成できるシナリオセットは、フェーズを1つだけ含みます。
+		</li>
+		<li>シナリオデータのスキーマで使用できるプロパティの一部は、デザインシートでは使用することができません。</li>
+		<li>デザインシートはシナリオデータ(json形式)をShift JISコードで出力します。このため、デザインシートで出力されたシナリオデータは環境によっては正しく処理できない場合があります。システムはShift JISコードを自動認識してUTF-8への変換を試みますが、Shift JISとUTF-8の変換が正しく行えない文字が含まれている場合、シナリオは正常に実行できない可能性があります。</li>
+		<li></li>
+	</ul>
+	デザインシートの仕様については<a href="#">TBD</a>を参照してください。
+<p></p>
+<h2><a id="resource"></a>リソース</h2>
+	<ul>
+	<li><a href="../../designsheet/designsheet.xlsm">デザインシート</a></li>
+	<li><a href="">TBD:サンプル</a></li>
+
+
+</ul>
+<h2>リモートAPIリファレンス</h2>
+<h2>概要</h2>
+<p>演習サーバのリモートAPIを説明します。</p>
+<p>演習サーバはHTTP APIで外部シスレムと連携することができます。
+APIには以下の2種類があります。</p>
+<ul>
+<li>共通API
+セション管理などの共通機能</li>
+<li>演習API
+演習コンソールおよびファシリテータコンソールの操作</li>
+<li>イベントAPI
+演習フェーズ中にイベントを受け取るためのAPI</li>
+</ul>
+<h2>用語と要件</h2>
+<ul>
+<li>演習サーバ
+リモートAPIを公開するサーバ。</li>
+<li>APIクライアント
+リモートAPIを使用して演習サーバと対話するノード。
+クライアントとして動作するWebブラウザまたはカスタムアプリケーションは、次の仕様に対応している必要があります。
+<ul>
+<li>HTTP 1.1(RFC7235)</li>
+<li>WebSocket(RFC6455)</li>
+<li>JSON(RFC8259/ECMA-404 2nd Edition)</li>
+</ul>
+</li>
+</ul>
+<h2>APIエンドポイント</h2>
+<p>APIエンドポイントのベースURLは次の通りです。</p>
+<ul>
+<li>http://[server]:[port]/[context]/workflow
+既定の配備項では次のようになります。</li>
+<li>http://localhost:8080/workshop/workflow
+以降では、APIエンドポイントを上記のベースURLからの相対パスで記述します。</li>
+</ul>
+<h3>概要</h3>
+<p>API通信は、クライアントからのリクエストと、サーバからのレスポンスで構成されます。
+リクエスト及びレスポンスは、特記がない限り次の仕様に従います。</p>
+<ul>
+<li>データはJSON形式(Content-Type: application/json)で交換されます。</li>
+<li>文字はマルチバイト文字として扱い、UTF-8でエンコードされます。</li>
+<li>データ長に制限はありません。</li>
+</ul>
+<h2>使用方法</h2>
+<ul>
+<li>
+<p>最初に、ログインAPIを使用してセションを開設し、セションキーを取得します。
+クライアントは以降のリクエストにおいて、HTTP拡張ヘッダ&quot;X-ssc-sessionkey&quot;を介してサーバにセションキーを渡します。</p>
+</li>
+<li>
+<p>セションを開放するためのログオフAPIを呼び出します。</p>
+</li>
+<li>
+<p>セションキーは演習サーバの実行中の間有効です。
+次の操作によって、すべてのセションは破棄されます。</p>
+<ul>
+<li>演習サーバのインスタンスを停止・再起動する</li>
+</ul>
+</li>
+<li>
+<p>有効なセションがない場合、演習コンソール機能およびファシリテータ機能の一部が制限されます。</p>
+</li>
+</ul>
+<h2>リファレンス</h2>
+<h3>ログイン</h3>
+<h4>エンドポイント</h4>
+<p>POST session</p>
+<h4>概要</h4>
+<p>演習サーバとのセションを開設します。
+ログインによってセションキーが割り当てられ、当該セションに対して演習コンソールおよびファシリテータコンソールおよびAPIの機能が許可されます。
+また、イベントAPIによるサーバからのイベント通知が有効となります。</p>
+<h4>要求</h4>
+<p>要求には次のパラメタを含めることができます。</p>
+<ul>
+<li>{string} userid (必須)
+ユーザIDを指定します。形式は[ロールID]@[チームID]とします。</li>
+<li>{string} passwd (オプション)
+パスワードを指定します。</li>
+<li>{boolean} admin (オプション)
+ファシリテータとしてログインする場合に指定します。</li>
+</ul>
+<h4>応答</h4>
+<p>成功すると、HTTPステータス200とともに、次のプロパティを持つJSONオブジェクトが返されます。
+{string} username ユーザ名。ロール名@チーム名。
+{string} userid ユーザID。ロールID@チームID。
+{string} sessionkey セションキー。
+{boolean} isadmin ユーザがファシリテータの場合はtrue。
+{string} clientId イベントAPIで使用されるクライアントの識別子。
+{string} role ロールID。
+{string} team チームID。</p>
+<h4>注意/備考</h4>
+<p>同一のユーザIDによる複数のログインは許されません。同時ログインを行った時の動作は未定義です。</p>
+<h4>例</h4>
+<h3>ログアウト</h3>
+<h4>エンドポイント</h4>
+<p>DELETE session</p>
+<h4>概要</h4>
+<p>演習サーバとのセションを破棄します。
+ログアウトによって、セションキーが破棄され、演習コンソールおよびファシリテータコンソールおよびAPIの機能が制限されます。
+また、イベントAPIによるサーバからのイベント通知は無効となります。</p>
+<h4>要求</h4>
+<p>要求にはパラメタはありません。</p>
+<h4>応答</h4>
+<p>成功するとHTTPステータス200が返されます。</p>
+<h4>注意/備考</h4>
+<h4>例</h4>
+<h3>ログアウト</h3>
+<h4>エンドポイント</h4>
+<h4>概要</h4>
+<h4>要求</h4>
+<p>要求にはパラメタはありません。</p>
+<h4>応答</h4>
+<p>成功するとHTTPステータス200が返されます。</p>
+<h4>注意/備考</h4>
+<h4>例</h4>
+
+</body>
+</html>

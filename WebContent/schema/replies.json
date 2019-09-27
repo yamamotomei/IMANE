@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title":"reply.json:リプライカードのセット",
+  "description": "アクションまたはトリガーに対する応答を定義します。\nリプライはアクションに対する応答として発生するイベントの雛型を定義します。リプライはまた、アクションに対して条件によって異なる応答を行うための条件を含みます。\nアクションに対するリプライは、次のように決定されます。\n- 自動応答ユーザに対してアクションが要求されると、アクションは一旦キューに保存され、応答待ち状態となります。アクションはすべてのリプライの処理が完了するとキューから削除されます。\nキューに保存されたアクションは一定時間ごとにリプライ処理の評価を受けます。まず、アクションIDと宛先ロールIDの組み合わせに対して、一致するリプライが候補として選択されます。\n- 候補となったリプライは、さらにorderプロパティによってグループ化されます。orderプロパティの小さなリプライがまず候補グループとして選択されます。\n- システムは、候補グループ中で、statecondition、timeconditionで指定された条件を満たすリプライを一定時間ごとに探索します。条件にマッチするものがあればリプライを送信し、orderプロパティが次に大きな値を持つリプライ候補グループを以降の評価対象とします。1つ以上の候補が存在し、条件にマッチするリプライがなければ、応答は保留され、一定時間経過後に再度評価されるのを待ちます。候補がひとつもなければ、リプライ処理は終了し、アクションはキューから削除されます。\nアクションに対して候補となるリプライが一つもない場合は、デフォルトのリプライが発行され、アクションはキューから削除されます。\n\n同時に条件を満たすリプライが複数ある場合(たとえば、orderプロパティの値が同じでstateconditionが異なるリプライがあり、指定されたstateconditionが同時に満足する場合)は、先に評価されたリプライが適用され、残りのリプライは破棄されます。",
+  "type": "object",
+  "$id":"#fricore-schema-replies",
+  "properties": {
+    "version":{
+      "title": "バージョン情報",
+      "description": "バージョン情報を記述します。",
+      "required":["string"]
+    },
+
+    "states": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "title": "リプライリスト",
+      "description":"フェーズとリプライのセットを定義します。",
+      "items": {
+        "required": [
+          "phase"
+        ],
+        "properties": {
+          "phase": {
+            "title": "フェーズ",
+            "description": "フェーズ番号を定義します。",
+            "type": "string",
+            "minLength": 1
+          },
+          "reply": {
+            "title": "リプライのセット",
+            "description": "phaseで指定したフェーズで使用するリプライの配列を設定します。",
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+              "required": [
+                "actionid",
+                "to"
+              ],
+              "properties": {
+                "actionid": {
+                  "title": "アクションID",
+                  "description":"このリプライの応答先となるアクションのIDを指定します。トリガーイベントを定義する場合は's0000'を指定します。必須",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "to": {
+                  "title": "宛先ロールID",
+                  "description": "このリプライの応答先となるユーザのロールIDを指定します。すべてのユーザを指定する場合はallを指定します。必須",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "from":{
+                  "title": "送信元ロール",
+                  "description": "トリガイベントを発行するときに送信元となるロールIDを指定します。定義済みロールのほか、systemを使用します。",
+                  "type":"string"
+                },
+                "hidden":{
+                  "title": "非表示",
+                  "description": "trueを指定すると、演習中にこのリプライをイベント一覧に表示しません。シナリオ制御のためのダミーのリプライを定義するときに使用します。省略値:false(表示する)",
+                  "type":"boolean"
+                },
+                "name": {
+                  "title": "名前",
+                  "description":"短い表示名を指定します。",
+                  "type": "string"
+                },
+                "state": {
+                  "title": "添付ステートカード",
+                  "description":"リプライに添付するステートカードのIDを指定します。トリガーアクションに対しては必須です。省略値:なし",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "statecondition": {
+                  "title": "ステート条件",
+                  "description":"リプライが有効となるシステムステートの条件を指定します。システムステートのIDと論理演算子(AND/OR/NAND/NOR/NOT)を指定します。省略値:なし(無条件にヒット)",
+                  "type": "array",
+                  "items": {
+                    "type":"string"
+                  }
+                },
+                "addstate": {
+                  "title": "追加システムステート",
+                  "description":"リプライを発行するときに、ここで指定したシステムステートを追加します。省略値:なし",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "removestate": {
+                  "title": "削除システムステート",
+                  "description":"リプライを発行するときに、ここで指定したシステムステートを削除します。省略値:なし",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "message": {
+                  "title": "メッセージ",
+                  "description": "ユーザに通知する表示用の応答メッセージを記述します。省略値:なし",
+                  "type": "string",
+                  "minLength": 0
+                },
+                "constraints": {
+                  "title": "非推奨"
+                },
+                "timecondition": {
+                  "title": "非推奨"
+                },
+                "order": {
+                  "title": "評価順",
+                  "description":"n-way型シーケンスで使用する、リプライの評価順を指定します。同じorderを持つリプライをグループ化し、orderの順に評価し、ヒットしたらリプライを返して次のorderをもつ評価対象のグループを評価します。省略値:1",
+                  "type": "number"
+                },
+                "delay": {
+                  "title": "応答遅延",
+                  "description":"アクションを受け付けてからリプライを返すまでの秒数を指定します。省略値は0(アクションに対して即座に応答する)です。",
+                  "default":10,
+                  "type": "number"
+                },
+                "elapsed":{
+                  "title": "経過時間",
+                  "description":"トリガーイベントに使用します。フェーズ開始からの経過時間(秒数)を指定します。省略値:0",
+                  "type":"number"
+                },
+                "type":{
+                  "title": "種類",
+                  "description": "リプライの種類を指定します。'hidden'を指定すると、イベント一覧への表示を抑制します。'null'をは予約語です。省略値:なし",
+									"type":"string",
+									"enum": ["","hidden","null"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "message": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "states",
+    "message"
+  ]
+}

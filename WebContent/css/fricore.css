@@ -1,0 +1,756 @@
+body{
+  font-family: "Segoe UI", sans-serif;
+  margin:0.1em;
+}
+.hidden{
+	display:none;
+}
+#product-info{
+	background-color:darkred;color:white;
+	position:fixed;bottom:0;width:100%;right:0;text-align:right;
+}
+div #product-info>span{
+margin-left:0.1em;margin-right:0.1em;
+}
+input[type='radio']{
+	vertical-align:middle;
+	margin-left:0.5em;margin-right:0.2em;
+}
+th,td{text-align:left;vertical-align:top;border:1px solid gray;}
+#loading {
+    width: 20%;height: 20%;
+    background-image:url(../image/loading.gif);
+    background-repeat:no-repeat;
+    background-size:contain;
+    opacity: 0.5;
+    border-radius: 15px;
+    position: fixed;
+    left: 40%;top: 40%;
+    z-index: 10000;
+    display:none;
+}
+
+/**tablesorterによりスタイルを上書きされてしまうため*/
+table.tablesorter tbody td{
+	color:inherit;
+	padding-top:0;padding-bottom:0;
+}
+#wfview thead th{
+	white-space:nowrap;
+}
+h3,h4{
+margin-top:0.1em;margin-bottom:0.1em;
+}
+.ui-button {
+	vertical-align:baseline;
+    padding: .2em .5em;
+}
+input[type=checkbox]{
+	vertical-align:middle;
+    padding: .1em .5em;
+}
+.iconbutton{
+	cursor:hand;
+}
+#headerctrl{
+	position:absolute;
+	top:0;right:0;
+}
+.searchbox{
+	display:inline;
+	float:right;
+	margin: 0 0.5em;
+	font-family:FontAwesome;
+	width:10em;
+}
+#effect-container{
+	display:none;
+}
+/**実験的機能*/
+.experimental{
+	opacity:0.3;
+}
+/**フェーズ中のみ利用可能なUI部品*/
+.live{
+}
+.live.offline{
+	opacity:0.3;
+}
+.live.online{
+	opacity:inherit;
+}
+.balloon{
+	display:none;
+	position:absolute;
+	left:0;top:0;
+	background-color:bisque;
+	border:1px solid gray;
+	border-radius: 4px;
+	box-shadow:2px 2px 4px;
+	padding:0.1em;
+}
+
+
+.fa{/* padding:0.2em; *//* min-height: 1.4em; *//* vertical-align: middle; */}
+.icon{
+	color:inherit;
+	text-decoration:none;
+}
+.menuicon{
+    display: inline-block;
+    /* width: 5em; */
+    font-size: 1.2em;
+    z-index: 1000;
+    margin: 0 1em;
+    color: darkgray;
+    float: right;
+}
+.menuicon a{
+	color:inherit;
+	text-decoration:none;
+}
+.process-running{
+	color:blue;
+}
+.process-aborted{
+	color:red;
+}
+.select2-custom{
+	line-height:2em;height:2em;vertical-align:middle;
+}
+.ui-tabs .ui-tabs-panel{
+	padding: 0.2em 0.2em;
+}
+.ui-accordion .ui-accordion-content{
+	padding: 0.2em 0.2em;
+}
+
+#action-dialog>input{max-width:20em;overflow-x:hidden;}
+.transparent{
+background-color:transparent;
+}
+.ctrl{
+	vertical-align:middle;
+	display:inline-block;
+	padding-left:0.2em;padding-right:0.1em;
+	border: 1px solid lightgray;
+	border-radius:0.2em 0.2em;
+	font-weight:normal;
+	font-size:normal;
+	float:right;
+}
+.picker{
+float:right;
+width:1.2em;
+height:1.2em;
+border:none;
+padding:0;
+background-color:none;
+}
+.picker:hover{
+border:none;
+background-color:none;
+}
+.layout-table th,td{
+border:none;
+}
+.layout-table th{
+width:8em;
+}
+#chartdef{
+width:100%;
+height:20em;
+overflow-y:scroll;
+}
+
+#viewport{
+background-color:white;	
+}
+#header{
+	background-color:lightgray;
+}
+#headermenu{
+position:absolute;
+top:0;
+right:5px;
+width:15em;
+}
+.ui-menu-item>a{
+display:block;
+}
+.subpanel{
+	border:1px solid lightgray;
+	background-color:#fffeff;
+	float:left;
+	width:30em;
+	height:20em;
+	margin:0.2em;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 3px 3px 3px 2px rgba(0,0,0,0.2);
+    overflow-y:scroll;
+}	
+#contexts{
+	height:80%;
+}
+
+ul{
+	margin-left: 0.2em;
+	padding-left: 0.4em;
+}
+/**アクションカード、ステートカード情報*/
+.card{
+	color:#404080;
+	display:block;
+	background-color: #f0f8e0;
+	text-decoration:none;
+	border:1px solid lightgray;
+	margin: 0.2em;
+	border-radius: 2px 2px 2px 2px;
+	box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.2);
+	float:left;
+	text-align:center;
+	/* min-height:4em; */
+	/* padding: 0.2em; */
+	min-width:8em;
+}
+/**テーブル中のカード情報*/
+.list-card{
+	/* display: inline-block; */
+	/* height:1.5em; */
+	/* min-height:1.5em; */
+	max-width: 100%;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	vertical-align: middle;
+	/* padding: 0.2em; */
+	white-space: nowrap;
+	/* word-wrap: break-word; */
+}
+
+/**テーブル中のアクションカード情報*/
+.list-card-action{
+	background-color: #f0f0e0;
+}
+.list-card-long{
+	max-width:50em;
+	display:inline-table;
+}
+/**テーブル中のステートカード情報*/
+.list-card-state{
+	background-color: #f0f8c0;
+}
+.list-card-state.list-card-state-type1{
+	color:blue;
+}
+.list-card-state.list-card-state-type2{
+	color:orange;
+}
+.list-card-state.list-card-state-type3{
+	color:red;font-weight:bold;
+}
+.list-card-point{
+	background-color: #f0c0f8;
+}
+/**選択可能なテーブルの列*/
+.listitem-selectable{
+	cursor:hand;
+}
+/**テーブル中で選択された列*/
+.selected>td{
+	font-weight:bold;
+	background-color: #e0d8e0 !important;
+	max-height:none;
+	white-space:
+}
+.selected>td>.list-card{
+	white-space:initial;
+}
+td{
+	height:1.5em;
+}
+tr{
+	height:1.5em;
+}
+tr:focus{
+	max-height:none;
+}
+.marked,.marked>td{
+	color:red;
+	font-weight:bold;
+}
+.information{
+	float:none;
+	min-height:1em;
+	width:100%;
+	list-style-type:disc;
+	text-align:left;
+	cursor:pointer;
+}
+.new-information{
+	color: #c06060;
+	list-style-type:circle;	
+}
+
+
+.clickable:hover{
+
+}
+
+.panelheader{
+	font-weight:bold;
+	padding-left:1em;
+}
+.panelcontent{
+height:80%;
+}
+.panelfooter{
+	text-align:center;
+	height:1.5em;
+	
+}
+.warning{
+	color:#a0a040;
+	font-weight:bold;
+}
+.error{
+	color:#c04040;
+	font-weight:bold;
+}
+.history{
+position:fixed;
+left:0;top:0;width:99%;height:99%;
+}
+.member-offline{
+	color:darkgray;
+}
+.member-online{
+	color:inherit;
+}
+.member-system{
+	text-decoration:none;
+}
+.member-manual{
+	text-decoration:bold;
+}
+
+#action-dialog th{
+	min-width:10em;
+}
+.input-action-errormessage{
+	color:red;
+}
+
+/**新規アクションダイアログの入力要素*/
+.action-input{
+display:inline-block;
+width:100%;
+/*border:1px solid gray;*/
+}
+/**新規アクションダイアログの入力要素ラベル*/
+.cell-label{
+display:inline-block;
+width:8em;
+vertical-align:middle;
+}
+
+.replyTo{
+	font-size:small;
+	color:darkgray;
+	margin-left:1em;
+}
+#event-dialog>td,th{
+	margin-top:0.1em;
+	margin-bottom:0.1em;
+}
+.tocontent{
+}
+.cccontent{
+	display:none;
+}
+/* 
+.expander{
+	border:none;
+	background:none;
+	cursor:pointer;
+	color:darkblue;
+	vertical-align:middle;
+}
+.expander:before{
+	content: "\f196";
+	vertical-align: middle;
+	font-family: FontAwesome;
+}
+.expander.expanded:before{
+	content: "\f147";
+ 	font-family: FontAwesome;
+}
+.expander:hover{
+
+}
+ */
+ .statecard-ref{
+	color:darkgreen;
+	text-decoration:none;
+	cursor:pointer;
+	border:1px solid gray;
+	border-radius:2px;
+
+}
+.not-acceptable{
+	color:darkgray;
+}
+.actioncard-ref{
+	color:darkblue;
+	text-decoration:none;
+	cursor:pointer;
+	border:1px solid gray;
+	border-radius:2px;
+	max-width:8em;
+	overflow:hidden;
+}
+.add{
+	text-decoration:none;
+}
+
+.remove{
+	text-decoration:none;
+}
+.state{
+	text-decoration:none;
+}
+.condition{
+	text-decoration:none;
+}
+
+/**イベント一覧のレイアウト*/
+
+#event-list table tbody tr td{table-layout:fixed;vertical-align:middle;}
+#event-list tr th:nth-child(1){width:2em;}
+#event-list tr th:nth-child(2){width:6em;}
+#event-list tr th:nth-child(3){max-width:9em;}
+#event-list tr th:nth-child(4){max-width:9em;}
+
+#event-list tr td:nth-child(1){width:2em;}
+#event-list tr td:nth-child(2){width:6em;}
+#event-list tr td:nth-child(3){max-width:9em;}
+#event-list tr td:nth-child(4){max-width:9em;}
+
+
+#wfhistory table tbody tr td{table-layout:fixed;vertical-align:middle;}
+#wfhistory tr th:nth-child(1){max-width:.5em;}
+#wfhistory tr th:nth-child(2){max-width:7em;}
+#wfhistory tr th:nth-child(3){max-width:9em;}
+#wfhistory tr th:nth-child(4){max-width:9em;}
+#wfhistory tr th:nth-child(5){max-width:12em;}
+#wfhistory tr th:nth-child(6){max-width:15em;}
+#wfhistory tr th:nth-child(7){max-width:15em;}
+#wfhistory tr th:nth-child(8){max-width:auto;}
+#wfhistory tr td:nth-child(1){max-width:2em;}
+#wfhistory tr td:nth-child(2){max-width:7em;}
+#wfhistory tr td:nth-child(3){max-width:7em;}
+#wfhistory tr td:nth-child(4){max-width:7em;}
+#wfhistory tr td:nth-child(5){max-width:12em;}
+#wfhistory tr td:nth-child(6){max-width:15em;}
+#wfhistory tr td:nth-child(7){max-width:15em;}
+#wfhistory tr td:nth-child(8){width:auto;}
+
+
+
+#helpcnontent tr td{
+	border:1px solid white;
+}
+#helpcontent tr td:nth-child(1){width:20em;}
+#helpcontent tr td:nth-child(3){width:12em;}
+#helpcontent tr td:nth-child(4){width:4em;}
+
+#help-roles tr td:nth-child(1){width:14em;}
+#help-roles tr td:nth-child(3){width:4em;}
+#help-roles tr td:nth-child(4){width:4em;}
+
+.action-unavailable{color:darkgray;}
+
+#member-pane>table td:nth-child(1){width:3em;}
+#member-pane>table td:nth-child(2){width:14em;}
+#member-pane>table td:nth-child(3){width:14em;}
+#member-pane>table td:nth-child(4){max-width:14em;}
+
+#member-pane>table td:nth-child(6){width:2em;}
+
+#action-pane td:nth-child(1){width:5em;}
+#action-pane td:nth-child(2){width:12em;}
+#action-pane td:nth-child(3){width:12em;}
+#action-pane td:nth-child(4){width:3em;}
+#action-pane td:nth-child(6){max-width:8em;}
+#action-pane td:nth-child(7){max-width:12em;}
+#action-pane td:nth-child(8){max-width:2em;}
+
+#state-pane td:nth-child(1){width:8em;}
+#state-pane td:nth-child(2){width:auto;}
+#state-pane td:nth-child(3){width:4em;}
+#state-pane td:nth-child(4){width:8em;}
+
+#reply-pane td:nth-child(1){width:7em;}
+#reply-pane td:nth-child(2){width:15em;}	
+#reply-pane td:nth-child(3){width:8em;}
+#reply-pane td:nth-child(4){width:25em;}
+#reply-pane td:nth-child(5){width:25em;}
+#reply-pane td:nth-child(6){width:2em;}
+#reply-pane td:nth-child(7){width:2em;}
+
+
+#wftrigger tr th:nth-child(1){width:8em;}
+#wftrigger tr th:nth-child(2){width:14em;}
+#wftrigger tr th:nth-child(3){width:5em;}
+
+#wftrigger tr th:nth-child(7){width:12em;}
+#wftrigger tr td:nth-child(1){width:8em;}
+#wftrigger tr td:nth-child(2){width:14em;}
+#wftrigger tr td:nth-child(3){width:5em;}
+#wftrigger tr td:nth-child(7){width:12em;}
+
+/**シーケンス図のactor要素*/
+/*.actor{width:100;}*/
+
+/**テスト*/
+.ui-tabs-panel{
+border:1px solid lightgray;
+}
+.ui-accordion{
+border:1px solid lightblue;
+}
+.ui-accordion-content{
+border:1px solid lightgreen;
+}
+
+/**--テスト*/
+
+
+.dialog-select{width:100%;}
+#mermaidChart0{
+transform-origin:none;
+}
+
+#svgctrl{
+    position: fixed;
+    border: 1px;
+    left: 37em;
+    top: 4em;
+    background: lightgray;
+    border: 1px solid gray;
+    position: fixed;
+    border: 1px;
+    font-size: small;
+    padding: 0.1em;
+    opacity: 0.4;
+}
+#svgctrl:hover{
+    opacity: 1;
+}
+
+
+.system-role{
+	color:darkgray;
+}
+.online-role{
+	color:blue;
+}
+.tablesorter>tbody>tr{
+	border-bottom:1px solid white;
+}
+#help-actions-container>table tbody :nth-child(1){
+width:12em;
+}
+#help-actions-container>table tbody:nth-child(3){
+width:12em;
+}
+#help-actions-container>table tbody:nth-child(4){
+	width:3em;
+}
+
+.scenario-active{
+font-weight:bold;
+}
+
+.statecard-list{
+max-width:4em;
+overflow:elipsis;
+}
+
+
+#printheader{
+	border:none;
+	width:40em;
+}
+@media print {
+    #header,#svgctrl,#svgui,#statusbar,#headermenu,hr,#headermenu,#headerctrl,#product-info,#sizepicker-frame{
+    	display:none;
+    }
+    #svgcontainer{border:1px solid blue;height:100%;}
+    svg{border:1px solid red;height:100%;}
+    #printheader{
+    	margin-left:none;
+    	display:none;
+    	font-size:1rem;
+    }
+}
+    /**ヘッダはブラウザの印刷機能で付与してください*/
+
+.wrapper {
+  position: relative;
+  padding: 0 5px;
+  overflow-y: auto;
+}
+
+
+
+
+
+/**font-awesomeのアイコンの色を定義*/
+.fa-black:before {color:black;}
+.fa-silver:before {color:silver;}
+.fa-gray:before {color:gray;}
+.fa-white:before {color:white;}
+.fa-maroon:before {color:maroon;}
+.fa-red:before {color:red;}
+.fa-purple:before {color:purple;}
+.fa-fuchsia:before {color:fuchsia;}
+.fa-green:before {color:green;}
+.fa-lime:before {color:lime;}
+.fa-olive:before {color:olive;}
+.fa-yellow:before {color:yellow;}
+.fa-navy:before {color:navy;}
+.fa-blue:before {color:blue;}
+.fa-teal:before {color:teal;}
+.fa-aqua:before {color:aqua;}
+.fa-orange:before {color:orange;}
+.fa-aliceblue:before {color:aliceblue;}
+.fa-antiquewhite:before {color:antiquewhite;}
+.fa-aquamarine:before {color:aquamarine;}
+.fa-azure:before {color:azure;}
+.fa-beige:before {color:beige;}
+.fa-bisque:before {color:bisque;}
+.fa-blanchedalmond:before {color:blanchedalmond;}
+.fa-blueviolet:before {color:blueviolet;}
+.fa-brown:before {color:brown;}
+.fa-burlywood:before {color:burlywood;}
+.fa-cadetblue:before {color:cadetblue;}
+.fa-chartreuse:before {color:chartreuse;}
+.fa-chocolate:before {color:chocolate;}
+.fa-coral:before {color:coral;}
+.fa-cornflowerblue:before {color:cornflowerblue;}
+.fa-cornsilk:before {color:cornsilk;}
+.fa-crimson:before {color:crimson;}
+.fa-cyan:before {color:cyan;}
+.fa-darkblue:before {color:darkblue;}
+.fa-darkcyan:before {color:darkcyan;}
+.fa-darkgoldenrod:before {color:darkgoldenrod;}
+.fa-darkgray:before {color:darkgray;}
+.fa-darkgreen:before {color:darkgreen;}
+.fa-darkgrey:before {color:darkgrey;}
+.fa-darkkhaki:before {color:darkkhaki;}
+.fa-darkmagenta:before {color:darkmagenta;}
+.fa-darkolivegreen:before {color:darkolivegreen;}
+.fa-darkorange:before {color:darkorange;}
+.fa-darkorchid:before {color:darkorchid;}
+.fa-darkred:before {color:darkred;}
+.fa-darksalmon:before {color:darksalmon;}
+.fa-darkseagreen:before {color:darkseagreen;}
+.fa-darkslateblue:before {color:darkslateblue;}
+.fa-darkslategray:before {color:darkslategray;}
+.fa-darkslategrey:before {color:darkslategrey;}
+.fa-darkturquoise:before {color:darkturquoise;}
+.fa-darkviolet:before {color:darkviolet;}
+.fa-deeppink:before {color:deeppink;}
+.fa-deepskyblue:before {color:deepskyblue;}
+.fa-dimgray:before {color:dimgray;}
+.fa-dimgrey:before {color:dimgrey;}
+.fa-dodgerblue:before {color:dodgerblue;}
+.fa-firebrick:before {color:firebrick;}
+.fa-floralwhite:before {color:floralwhite;}
+.fa-forestgreen:before {color:forestgreen;}
+.fa-gainsboro:before {color:gainsboro;}
+.fa-ghostwhite:before {color:ghostwhite;}
+.fa-gold:before {color:gold;}
+.fa-goldenrod:before {color:goldenrod;}
+.fa-greenyellow:before {color:greenyellow;}
+.fa-grey:before {color:grey;}
+.fa-honeydew:before {color:honeydew;}
+.fa-hotpink:before {color:hotpink;}
+.fa-indianred:before {color:indianred;}
+.fa-indigo:before {color:indigo;}
+.fa-ivory:before {color:ivory;}
+.fa-khaki:before {color:khaki;}
+.fa-lavender:before {color:lavender;}
+.fa-lavenderblush:before {color:lavenderblush;}
+.fa-lawngreen:before {color:lawngreen;}
+.fa-lemonchiffon:before {color:lemonchiffon;}
+.fa-lightblue:before {color:lightblue;}
+.fa-lightcoral:before {color:lightcoral;}
+.fa-lightcyan:before {color:lightcyan;}
+.fa-lightgoldenrodyellow:before {color:lightgoldenrodyellow;}
+.fa-lightgray:before {color:lightgray;}
+.fa-lightgreen:before {color:lightgreen;}
+.fa-lightgrey:before {color:lightgrey;}
+.fa-lightpink:before {color:lightpink;}
+.fa-lightsalmon:before {color:lightsalmon;}
+.fa-lightseagreen:before {color:lightseagreen;}
+.fa-lightskyblue:before {color:lightskyblue;}
+.fa-lightslategray:before {color:lightslategray;}
+.fa-lightslategrey:before {color:lightslategrey;}
+.fa-lightsteelblue:before {color:lightsteelblue;}
+.fa-lightyellow:before {color:lightyellow;}
+.fa-limegreen:before {color:limegreen;}
+.fa-linen:before {color:linen;}
+.fa-magenta:before {color:magenta;}
+.fa-mediumaquamarine:before {color:mediumaquamarine;}
+.fa-mediumblue:before {color:mediumblue;}
+.fa-mediumorchid:before {color:mediumorchid;}
+.fa-mediumpurple:before {color:mediumpurple;}
+.fa-mediumseagreen:before {color:mediumseagreen;}
+.fa-mediumslateblue:before {color:mediumslateblue;}
+.fa-mediumspringgreen:before {color:mediumspringgreen;}
+.fa-mediumturquoise:before {color:mediumturquoise;}
+.fa-mediumvioletred:before {color:mediumvioletred;}
+.fa-midnightblue:before {color:midnightblue;}
+.fa-mintcream:before {color:mintcream;}
+.fa-mistyrose:before {color:mistyrose;}
+.fa-moccasin:before {color:moccasin;}
+.fa-navajowhite:before {color:navajowhite;}
+.fa-oldlace:before {color:oldlace;}
+.fa-olivedrab:before {color:olivedrab;}
+.fa-orangered:before {color:orangered;}
+.fa-orchid:before {color:orchid;}
+.fa-palegoldenrod:before {color:palegoldenrod;}
+.fa-palegreen:before {color:palegreen;}
+.fa-paleturquoise:before {color:paleturquoise;}
+.fa-palevioletred:before {color:palevioletred;}
+.fa-papayawhip:before {color:papayawhip;}
+.fa-peachpuff:before {color:peachpuff;}
+.fa-peru:before {color:peru;}
+.fa-pink:before {color:pink;}
+.fa-plum:before {color:plum;}
+.fa-powderblue:before {color:powderblue;}
+.fa-rosybrown:before {color:rosybrown;}
+.fa-royalblue:before {color:royalblue;}
+.fa-saddlebrown:before {color:saddlebrown;}
+.fa-salmon:before {color:salmon;}
+.fa-sandybrown:before {color:sandybrown;}
+.fa-seagreen:before {color:seagreen;}
+.fa-seashell:before {color:seashell;}
+.fa-sienna:before {color:sienna;}
+.fa-skyblue:before {color:skyblue;}
+.fa-slateblue:before {color:slateblue;}
+.fa-slategray:before {color:slategray;}
+.fa-slategrey:before {color:slategrey;}
+.fa-snow:before {color:snow;}
+.fa-springgreen:before {color:springgreen;}
+.fa-steelblue:before {color:steelblue;}
+.fa-tan:before {color:tan;}
+.fa-thistle:before {color:thistle;}
+.fa-tomato:before {color:tomato;}
+.fa-turquoise:before {color:turquoise;}
+.fa-violet:before {color:violet;}
+.fa-wheat:before {color:wheat;}
+.fa-whitesmoke:before {color:whitesmoke;}
+.fa-yellowgreen:before {color:yellowgreen;}
+.fa-rebeccapurple:before {color:rebeccapurple;}

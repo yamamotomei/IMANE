@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title":"setting.json:演習シナリオ設定",
+  "description": "演習設定を定義します。",
+  "type": "object",
+  "$id":"#fricore-schema-setting",
+  "properties": {
+    "invisible-action": {
+      "title": "不可視アクション",
+      "description": "演習が進行するまで参加者から隠すアクションのIDを記述します。ここで設定したアクションはヘルプ情報に表示されなくなります。",
+      "type": "array",
+      "items": {
+        "type":"string",
+        "properties": {}
+      }
+    },
+    "roles-order": {
+      "title": "ロール表示順",
+      "description": "シーケンス図を表示する際の役割の並びを示します。シーケンス図が煩雑となる場合に表示順や表示要否を設定するために使用します。",
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "required": [
+          "role",
+          "order"
+        ],
+        "properties": {
+          "role": {
+            "title": "ロールID",
+            "description":"役割のIDを設定します。",
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "title":"表っ順",
+            "description": "役割の表示順を設定します。(若い順に左寄せ)",
+            "type": "number"
+          }
+        }
+      }
+    },
+    "name":{
+      "title": "名前",
+      "description": "シナリオセットの名前を設定します。",
+      "required":["string"]
+    },
+    "description":{
+      "title": "説明",
+      "description": "シナリオセットの説明を設定します。",
+      "required":["string"]
+    },
+    "copyright":{
+      "title": "著作権表記",
+      "description": "シナリオセットの著作権情報を設定します。",
+      "required":["string"]
+    },
+    "version":{
+      "title": "バージョン情報",
+      "description": "シナリオセットのバージョン情報を記述します。",
+      "required":["string"]
+    },
+    "created":{
+      "title": "作成日時",
+      "description": "シナリオセットの作成日時を記述します。",
+      "required":["string"]
+    },
+    "updated":{
+      "title": "更新日時",
+      "description": "シナリオセットの更新日時を記述します。",
+      "required":["string"]
+    },
+    "author":{
+      "title": "作成者",
+      "description": "シナリオセットの作成者情報を記述します。",
+      "required":["string"]
+    },
+    "phases": {
+      "title":"フェーズ",
+      "description": "シナリオに含まれる演習フェーズを定義します。",
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "required": [
+          "phase"
+        ],
+        "properties": {
+          "phase": {
+            "title": "フェーズ番号",
+            "description": "フェーズを示す番号を、1から始まる一意な整数で設定します。必須",
+            "type": "number",
+            "uniqueItems": true,
+            "minimum": 1
+          },
+          "description": {
+            "title": "説明",
+            "description":"フェーズの短い説明を記述します。",
+            "type": "string",
+            "minLength": 1
+          },
+          "timelimit": {
+            "title": "制限時間",
+            "description": "フェーズの演習時間(秒)を設定します。残り時間の表示に使用します。省略値:0",
+            "type": "number"
+          },
+          "endstate": {
+            "title": "終了ステート",
+            "description":"フェーズの終了条件となるシステムステートのIDを設定します。",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "copyright":{
+            "title": "著作権表記",
+            "description": "演習シナリオの著作権情報を設定します。",
+            "type":"string"
+          },
+          "version":{
+            "title": "バージョン情報",
+            "description": "演習シナリオのバージョン情報を記述します。",
+            "type":"string"
+          },
+          "created":{
+            "title": "作成日時",
+            "description": "演習シナリオの作成日時を記述します。",
+            "type":"string"
+          },
+          "updated":{
+            "title": "更新日時",
+            "description": "演習シナリオの更新日時を記述します。",
+            "type":"string"
+          },
+          "author":{
+            "title": "作成者",
+            "description": "演習シナリオの作成者情報を記述します。",
+            "type":"string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "phases"
+  ]
+}

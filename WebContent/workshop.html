@@ -1,0 +1,804 @@
+<html lang="ja" >
+<!-- Copyright 2017,2018 Fujitsu Limited -->
+<head>
+<meta charset="UTF-8">
+<title>FrICORE</title>
+<link href = "js/lib/themes/base/jquery-ui.min.css" rel = "stylesheet" type = "text/css"/>
+<link href = "css/select2.min.css" rel = "stylesheet" type = "text/css"/>
+
+<link href = "css/tablesorter.default.css" rel = "stylesheet" type = "text/css"/>
+<link href = "css/jquery.contextMenu.css" rel = "stylesheet" type = "text/css"/>
+<link href = "css/font-awesome.min.css" rel = "stylesheet" type = "text/css"/>
+
+<link href = "image/blue/style.css" rel = "stylesheet" type = "text/css"/>
+<link rel = "stylesheet" type="text/css" href = "css/fricore.css" id = "theme-default">
+<link rel = "stylesheet" type="text/css" href = "css/custom.css" id = "theme-fancy" class="theme">
+ 
+<script type = "text/javascript" src = "js/lib/mermaid.js"></script>
+<script type = "text/javascript" src = "js/lib/jquery-3.0.0.js"></script>
+<script type = "text/javascript" src = "js/lib/jquery-ui.min.js"></script>
+<script type = "text/javascript" src = "js/lib/underscore.js"></script>
+<!-- <script type = "text/javascript" src = "js/lib/jquery.tablesorter.min.js"></script>-->
+<script type = "text/javascript" src = "js/lib/jquery.tablesorter.js"></script>
+<!--<script type = "text/javascript" src = "js/lib/jquery.tablesorter.widgets.js"></script>-->
+<script type = "text/javascript" src = "js/lib/jquery.quicksearch.js"></script>
+<script type = "text/javascript" src = "js/lib/select2.full.min.js"></script>
+<script type = "text/javascript" src = "js/lib/jquery.ui.position.js"></script>
+<script type = "text/javascript" src = "js/lib/jquery.contextMenu.js"></script>
+
+<script type = "text/javascript" src = "js/fricore.js"></script>
+
+<!-- <script type = "text/javascript" src = "js/lib/svg.min.js"></script>-->
+
+
+
+
+
+</head>
+<body>
+
+
+<div id = 'product-info'><span id = 'server-desc'></span> <span id = 'server-version'> </span><span id = 'client-desc'></span>
+	<span id = 'client-version'></span> <span id='copyright'></span></div>
+
+<div id = "header">
+<h3 id ="loginuser" style = "display:inline-block">ログインしていません。</h3>
+
+<div id = "loginpanel" style = 'display:inline-block'>
+	<script>
+		function onIDchanged(){
+			if($('.role').val() && $('.team').val()){
+				var uid = $('.role').val() ? ($('.role').val()+'@'+$('.team').val()) : "";
+				$('#userid').val(uid);
+			}
+		}
+	</script>
+	<label for='userid'>ユーザID:</label>
+		<select class='role' onchange='onIDchanged()' style='width:12em'>
+
+
+			<option value='facilitator'>ファシリテータ</option>
+		</select>
+		<select class='team'  onchange='adjustUserList();onIDchanged()' style='width:10em'>
+
+		</select>
+		
+		<span class="fa fa-icon fa-pencil-square-o iconbutton" onclick="toggle('#userid')" title='ユーザIDの直接入力を切り替えます。'></span>
+		<input type = "text" name = "userid" id = "userid" value = "" size=30 
+		title="リストからユーザを選択するか、ここにIDを直接入力します。" style="display:none"/>
+		
+	<label for='password' style='display:none'>パスワード:</label><input hidden = 'true' type = "password" name = "password" id = "password" value = "qwer1234"/>
+	<button onclick = "doLogin()" id = "loginbutton" class = "fa fa-icon fa-sign-in">ログイン</button>
+	<button onclick = "doLogout()" id  ="logoutbutton" class = "fa fa-icon fa-sign-out">ログアウト</button>
+	<span style='display:none' id = "sessioninfo"></span>
+
+
+	
+	</div>
+	<div id = "headerctrl" class='menuicon'>
+
+		<a href='#' onclick='$("#theme-picker").menu().show();'>
+		<span class='fa fa-gear' style='font-size:1.5em' title='スキンを選択します。'></span></a>
+		<ul id="theme-picker"  style = "display:none;position:absolute;top:0;right:0;width:10em;z-index:1000"
+			onmouseleave='$(this).hide();' onclick='$(this).hide();'>
+		  <li><a href="#" onclick="changeTheme()" title = "既定のスキン">既定</a></li>
+		  <li><a href="#" onclick="changeTheme('#theme-fancy')" title = "明るい色調のスキン">ちょっとファンシー</a></li>
+		</ul>
+
+		<a href='#' onclick='$("#headermenu").menu().show();'>
+		<span class='fa fa-bars' style='font-size:1.5em' title='メニュー'></span></a>
+		<ul id="headermenu"  style = "display:none;position:absolute;top:0;right:0;z-index:1000"
+			onmouseleave='$("#headermenu").hide();'
+			onclick='$("#headermenu").hide();'
+			>
+		  <li><a href="#" onclick="dashboard()"><span class="ui-icon ui-icon-contact"></span>演習コンソール</a></li>
+		  <li><a href="#" onclick="history()"><span class="ui-icon ui-icon-image"></span>振り返り</a></li>
+		  <li><a href="#" onclick="wfview()"><span class="ui-icon ui-icon-calculator"></span>ファシリテータ用コンソール</a></li>
+		</ul>
+	</div>
+
+<div id='statusbar' style='background-color:lightyellow;border:1px solid gray;margin:0;display:none;position:absolute;top:0'>
+<!-- 	<span style='margin-top: 0.1em;vertical-align:middle' class='ui-icon ui-icon-circle-close' onclick='hideStatusbar()'></span>
+ -->
+  	<span class='fa fa-remove' onclick='hideStatusbar()'></span>
+ 	<span id='warningarea'></span>
+</div>
+
+</div>
+
+
+<div id = "container"  class = 'main' style = 'display:none;'>
+
+
+<div id = "header-view" style="padding-top:0.5em;">
+<button class="live fa fa-icon fa-mail-forward" onclick='showActionDialog()' title='新規アクションを実行します。'>新規アクション</button><span class="separator"></span>
+<button class="live fa fa-icon fa-mail-reply"  onclick='showActionDialog("reply")' title='選択されたアクションに返信します。'>返信/回答</button><span class="separator"></span>
+<!-- <button onclick='showActionDialog("forward")'  title='新規アクションを他のユーザに共有します。'>転送</button> <span class="separator"></span>-->
+<button class="live fa fa-icon fa-refresh"  onclick='loadHistory()' title='イベント一覧を更新します。'>一覧更新</button>
+
+<!-- テスト用:ここから -->
+<span style='float:right' class='debugmenu'>臨時メニュー:
+<button onclick='viewActionCards()'>保有アクション</button>
+<button onclick='viewStateCards()'>保有情報</button>
+</span>
+
+<span style='float:right'>
+ヘルプ:
+
+<button title="シナリオの前提条件となるシステム構成の説明図を表示します。"  onclick='viewSystem()'>システム構成</button>
+<button title="シナリオの前提条件となる組織構成と連絡ルートの説明図を表示します。"   onclick='viewOrganizations()'>組織と連絡ルート</button>
+<button title="シナリオで定義された役割とアクションの情報を表示します。"   onclick='viewActions()' class = "live">役割とアクション</button>
+
+</span>
+
+
+</div>
+<div id = "list-view">
+</div>
+<div id = "hooter-view">
+</div>
+
+
+<div id = 'action-dialog' style = 'display:none;'>
+	<div>
+	<table style='width:100%' class='layout-table'>
+	
+	<tr><th title='実行するアクションを選択します。'>アクション</th><td>
+		<div class='action-input set-action'><select style='width:95%' onchange="onActionChanged()"><option value="あれや">あれや</option><option value="これや">これや</option></select></div></td></tr>
+	<tr><th title='アクションの対象を選択します。'>To</th><td>
+		<div class='action-input set-to'><select class='user-picker' style='width:95%'><option value="工場長">工場長</option><option value="IT課長">IT課長</option></select></div></td></tr>
+	<tr><th title='情報共有のため、アクションの実行イベントを同報で通知します。'>Cc</th><td>
+		<div class='action-input set-cc'><select multiple class='user-picker' style='width:95%'><option value="工場長">工場長</option><option value="IT課長">IT課長</option></select></div></td></tr>
+	<tr><th title='受信したイベントに対して返信します。'>返信元</th><td>
+		<div class='action-input set-reply-to'><select  class='action-input' style='width:95%'>
+			<option>tes</option>
+			<option disabled>tes2</option>
+		</select></div></td></tr>
+	<tr><th title='所有しているインシデント情報を共有します。'>インシデント情報</th><td>
+		<div class='action-input set-state'><select multiple style='width:95%' disabled>
+			<option>操業レベルは8</option>
+			<option>サイバー攻撃の予告あり</option>
+		</select></div></td></tr>
+	<tr><th title='任意のメッセージを追加します。'>メッセージ</th><td>
+		<div class='action-input set-comment'><textarea style='height:12em;width:95%'></textarea></div></td></tr>
+	</table>
+	</div>
+</div>
+
+<div id = 'event-dialog' style = 'display:none;'>
+	<div>
+		<button  style="float:right" onclick="	showActionDialog('reply', getSelectedEventElement())">返信/転送</button>
+	</div>
+	<div>
+	<table style='width:100%' class='layout-table'>
+	<tr><th title='発生日時'>発生日時</th><td>
+		<div class='event-input event-sentdate'></div></td></tr>
+	
+	<tr><th title='実行されたアクション'>アクション</th><td>
+		<div class='event-input event-action'></div></td></tr>
+	<tr><th title='アクションの実行元'>From</th><td>
+		<div class='event-input event-from'>
+		</div></td></tr>
+	<tr><th title='アクションの対象'>To</th><td>
+		<div class='event-input event-to'>
+		</div></td></tr>
+	<tr><th title='アクション実行イベントの同報通知先'>Cc</th><td>
+		<div class='event-input event-cc'>
+		</div></td></tr>
+<!-- 	<tr><th title='アクションの返信元'>返信元</th><td>
+		<div class='event-input event-reply-to'></div></td></tr>-->
+	<tr><th title='通知されたインシデント情報'>インシデント情報</th><td>
+		<div class='event-input event-state'>
+		</div></td></tr>
+	<tr><th title='任意のメッセージ'>メッセージ</th><td>
+		<div class='event-input event-comment'><textarea readonly style='height:12em;width:95%'></textarea></div></td></tr>
+	</table>
+	</div>
+</div>
+
+
+
+
+<div id = 'actioncard-dialog'></div>
+
+<div id = 'contact-dialog'></div>
+
+
+
+
+<hr/>
+
+
+<div id = "event-list" class='wrapper'>
+<h3>イベント<input type='text'  size=10  id = 'search-event-list' class='searchbox' placeholder='&#xf002;絞り込み'><span class='wfstatusinfo' style='font-size:0.8em;font-weight:normal;text-decoration:none;float:right'></span></h3>
+	<table class="tablesorter {sortlist: [[1,1]]}" style="width:100%">
+	<thead>
+		<tr><th></th><th title="イベントが発生した日時">日時</th><th title="イベントの送信元">From</th>
+		<th title="イベントの宛先">To/Cc</th><th title="イベントを発生元となったアクション">アクション</th>
+		<th title="イベントに添付されたインシデント情報">インシデント情報</th><th title="イベントに添付されたフリーテキスト">メッセージ</th></tr>
+	</thead>
+	<tbody>
+
+	</tbody>	
+	</table>
+</div>
+
+<div style = "display:none">
+<!--  -->
+<div id = "sidebar" style = "float:left">
+<div id = "contexts" >
+	<div class = "panelheader">状況</div>
+	<div class = "panelcontent"></div>
+	<div class = "panelfooter">
+	<button  onclick="doAction()">送信</button>
+	</div>
+</div>
+</div>
+<div id = "content" style = "border:1px ltgray">
+<div id = "actions" class = "subpanel">
+	<div class = "panelheader">対応カード</div>
+	<div class = "panelcontent">
+	</div>
+</div>
+<div id = "informations" class = "subpanel" data-multiselect="true">
+	<div class = "panelheader">保有情報</div>
+	<div class = "panelcontent"></div>
+</div>
+<div id = "contacts" class = "subpanel" data-multiselect="true">
+	<div class = "panelheader">連絡先</div>
+	<div class = "panelcontent"></div>
+</div>
+<div id = "queries" class = "subpanel">
+	<div class = "panelheader">問い合わせ項目</div>
+	<div class = "panelcontent"></div>
+</div>
+</div>
+</div>
+
+<!--  -->
+</div>
+
+
+<div id="genericdialog" title="情報" style = "display:none">
+  <span id = "dialogtype" style ="float:left; height: 1.5em; margin-top: 0.1em;"></span>
+  <span id = "dialogmessage" style  = "display:inline-block;overflow-y:scroll;width:90%;max-height:20em;">
+      message
+  </span>
+  <textarea id = "freetext" style = "width:100%;height:8em;overflow:scroll;max-height:20em"></textarea>
+</div>
+<div id = "dialogcontainer"  style="display:none">
+	<div class="dialogheader"></div>
+	<div class="dialogcontent" style = "padding-left:2em;"></div>
+	<div class="dialogfooter"></div>
+</div>
+<div id  ='history' class = 'main' style = 'display:none;'>
+
+<div id = "svgui" style='display:none;'>
+<select id='teampicker' onchange='renderHistory(this.value)' style='width:15em'></select>
+<button onclick="renderHistory()" title="演習の履歴をシーケンス図として表示します。">表示</button>
+
+
+<span style='float:right'>
+<select id = "resource-picker"></select>
+<button onclick="refreshResource()" title="履歴のリストを更新します。" class="fa fa-icon fa-list"></button>
+<button onclick="loadResource()" title="サーバにアップロードされた履歴を読み込みます。" class="fa fa-icon fa-download">サーバから読み込み</button>
+<button onclick="storeResource()" title="履歴をサーバにアップロードします。" class="fa fa-icon fa-upload">サーバにアップロード</button>
+<button onclick="$('#chartdef').toggle()" title="履歴を編集します。(危険)" class="fa fa-icon fa-edit">編集</button>
+<button onclick="render()" title = "編集した結果を反映してシーケンス図を表示します。" class="fa fa-icon fa-refresh">更新</button>
+</span>
+</div>
+<textarea  id = "chartdef" class = "chartdef" style = "display:none"></textarea>
+
+
+
+
+<div id = "svgctrl">
+	<button onclick="zoomin()" title='チャートを10%拡大します。'>拡大</button>
+	<button onclick="zoomout()" title='チャートを10%縮小します。'>縮小</button>
+	<button onclick="trim()" title='チャートをドラッグして選択した範囲を拡大表示します。'>トリム</button>
+	<button onclick="resume()" title='拡大/縮小前のサイズを復元します。'>元のサイズ</button>
+	<span id='zoomratio' style='display:inline-block;width:4em;padding-left:1em;'></span>
+	<button onclick="showFilter('#sequence-filter')" title = "表示対象を絞り込むための条件設定項目を表示します。">絞り込み条件を設定</button>
+	<div id = 'sequence-filter' style='display:none'>
+		<input type='checkbox' checked id='hide-inactive'><label for = 'hide-inactive' title='フェーズ中にアクションのなかったユーザを非表示にします。'>非アクティブなユーザを隠す</label><br/>
+		<input type='checkbox' checked id='hide-talk'><label for = 'hide-talk' title='「話し合い」アクションを非表示にします。'>「話し合い」を隠す</label><br/>
+		<input type='checkbox' checked id='hide-detail'><label for = 'hide-detail' title='イベントを短縮して表示します。'>イベントを短縮して表示</label><br/>
+		
+		<button onclick='checkAllFilter(true)' title="すべての役割の選択状態を有効にします。">すべての役割を選択</button>
+		<button onclick='checkAllFilter(false)' title="すべての役割の選択状態を無効にします。">すべての役割を解除</button>
+		<button onclick='applyFilter()' title = "役割の選択状態を適用してチャートを再表示します。">選択を適用</button>
+		<div id = 'sequence-role-filter'>
+		</div>
+	</div>
+</div>
+ <input type="text" id = "printheader"/>
+<div id = "svgcontainer" style='width:100%;height:auto; min-height:10em'>
+</div>
+</div>
+
+<div id='sizepicker-frame' style='width:100%;height:100%;border:1px solid gray; background-color:transparent;display:none'></div>
+
+<!-- script type="template" id = 'sizepicker'>
+<div id='sizepicker-frame' style='width:100%;height:100%;border:1px solid gray; background-color:transparent'/>
+</script>-->
+<div style = "clear:both"></div>
+
+
+
+<!-- ------------------------------------ファシリテータ用コンソール---------------------------------------------- -->
+
+<!-- --------------------------- ファシリテータ用: 管理メニュー ----------------------------------->
+
+<div id = "wfview" class='main' style = "display:none;position:relative;top:0;width:99%;">
+	<div id  = "processlist" class='wrapper' style='width:100%;position:relative;'>
+	<h4>演習シナリオ
+		<span class='ctrl '>
+			シナリオセット:<select class='scenarioset' style = 'width:10em;' onchange='onScenarioChanged()'></select>
+				<a class='fa fa-file-text-o icon' style='color:blue;' href='#' 
+				title='選択したシナリオセットの詳細を表示します。' onclick='showScenarioSet()'></a>
+				<a class='fa fa-check-square-o icon' style='color:blue;' href='#' 
+				title='選択したシナリオセットを有効化します。' onclick='activateScenarioSet()'></a>
+				<a class='fa fa-refresh icon' style='color:blue;' href='#' 
+				title='シナリオセットの一覧を更新します。' onclick='reloadScenarioSet()'></a>
+				<a class='fa fa-download icon' style='color:blue;' href='#' 
+				title='シナリオセットをダウンロードします。' onclick='downloadScenarioSet()'></a>
+				<a class='fa fa-upload icon' style='color:blue;' href='#' 
+				title='シナリオセットをアップロードします。' onclick='$(this).next().click()'></a>
+				<input type='file' style='display:none' class='ui-button ui-corner-all ui-widget' 
+				onchange='uploadScenarioSet(this);$(this).val("");'>
+			<span style="color:gray"> | </span>
+			フェーズ:		
+			<span class='assign-phase-container assign-phase-container-all'>
+			</span>
+			<a class = 'fa fa-forward icon' style='color:green;' href='#' onclick='assign(this, false, true);return false;' title='フェーズ番号を選択してすべてのチームの演習フェーズを開始します。'>すべて開始</a>
+			<a class = 'fa fa-minus-square icon' style='color:red;' href='#' onclick='abort(this, true);return false;' title='すべてのチームの演習フェーズを中断します。'>すべて中断</a>
+			<a class='fa fa-download icon' href='#' onclick='storeAll(this);return false;' title='すべてのチームの演習の状態を保存します。'>すべて状態を保存</a>
+		<!-- 	<input type='file' style='display:none' class='ui-button ui-corner-all ui-widget' 
+				onchange='alert("hoge?");storeAll(this);$(this).val("")'>--> 
+			<a class='fa fa-upload icon' href='#' onclick='$(this).next().click();return false;' title='保存したデータから演習の状態を復元します。'>状態を復元</a>
+			<input type='file' style='display:none' class='ui-button ui-corner-all ui-widget' 
+				onchange='restore(this);$(this).val("");'>
+				
+			<input type="checkbox" id="processlist-autoupdate"><label for= "processlist-autoupdate" title="チェックすると表示内容を一定時間ごとに自動的に最新化します。">自動的に更新</label>
+			<button class='live' onclick = "getProcess({},true)" title="表示内容を最新の状態に更新します。">すぐに更新</button>
+		</span></h4>
+		<table style="width:100%" class='tablesorter'>
+		<thead>
+		<tr onclick="showWFStatus()"><th>ID</th><th>チーム</th><th>名前</th><th>フェーズ</th>
+			<th>状態</th><th>スコア</th><th>開始</th><th>経過</th></tr>
+		</thead>
+		<tbody>
+		</tbody>
+		</table>
+	</div>
+	
+	<div id = 'facilitator-main' class = 'tabs' style = 'width:100%;position:relative;'><!-- ファシリテータ画面コンテンツ領域 -->
+		<div class='flowstatus'>
+			<div class='message' style='display:inline-block;padding:0.5em;'>一覧からチームを選択してください。</div>
+			<span class='ctrl'>
+			<button class='live' onclick = "showActionDialog('injection')" title="任意のアクションを実行します。">インジェクション</button>
+			<input type="checkbox" id="wf-autoupdate"><label for = "wf-autoupdate" title="チェックすると一覧を一定時間ごとに自動的に更新します。">自動的に更新</label>
+			<button class='live' onclick = "updateWF()" title="一覧の内容を更新します。">すぐに更新</button>
+			</span>
+	</div>
+	
+	<ul>
+		<li><a href = "#wfstatus">演習シナリオ概要</a></li>
+		<li><a href = "#wfhistory">イベント履歴</a></li>
+		<li><a href = "#wfqueue" >キュー</a></li>
+		<li><a href = "#wftrigger">トリガ</a></li>
+ 	</ul>
+	<!-- --------------------------- ファシリテータ用: ワークフロー概要 ----------------------------------->
+
+	
+	<div id = "wfstatus">
+	<div class='content '>
+
+		<div class='accordion'>
+
+		<h5>メンバ</h5>
+		<div class='members' id = "member-pane">
+			<div class='empty'>表示情報がありません。</div>
+			<table class='tablesorter'>
+				<thead>
+					<tr><th></th><th>ロール</th><th>ID</th><th>説明</th><th>所有ステート</th><th>自動応答</th></tr>
+				</thead>
+					<tbody>
+
+					</tbody>
+			</table>
+		</div>
+		
+		<h5>アクション</h5>
+		<div class='actions' id = "action-pane">
+			<div class='empty'>表示情報がありません。</div>
+			<table class='tablesorter'>
+				<thead>
+					<tr><th title='アクションの識別子'>ID</th><th title='アクションの名前'>名前</th><th title='アクションの説明と既定のメッセージ'>説明/メッセージ</th><th>種類</th>
+					<th title="自動アクションが実行された日時">発生日時</th><th title='このアクションを使用できるロールと自動アクションの送信元/宛先'>ロール</th><th title='アクションにより追加または削除されるステートカード'>ステート</th><th title='自動アクションの起動条件'>ステート条件</th><th title='アクションを使用できるフェーズ'>フェーズ</th></tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+		
+		<h5>ステート</h5>
+		<div class='state' id = "state-pane">
+		<div class='empty'>表示情報がありません。</div>
+		<table class='tablesorter'>
+			<thead>
+				<tr><th>ID</th><th>名前</th><th>説明</th>
+				<th title="システムステートに登録された日時">システムステート</th></tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+		</div>
+		
+		<h5>リプライ</h5>
+		<div class='reply' id = "reply-pane">
+		<div class='empty'>表示情報がありません。</div>
+		<table class='tablesorter'>
+			<thead>
+				<tr><th title="リプライの対象となるアクションのID">アクションID</th><th>名前/メッセージ</th><th>ロール</th>
+				<th title="このリプライに添付するステートカード、追加、削除するシステムステートカード">ステート</th>
+					<th title="このリプライが適用されるためのシステムステート条件">ステート条件</th>
+					<th>オーダー</th><th>待ち時間</th></tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+		</div>
+
+		<h5>ポイント</h5>
+		<div class='point' id = "point-pane">
+		<div class='empty'>表示情報がありません。</div>
+		<table class='tablesorter'>
+			<thead>
+				<tr><th>ID</th><th>名前/説明</th><th>得点</th><th>システムステートID</th><th>システムステート前提条件</th>
+					<th>フェーズ</th><th>経過時間条件</th></tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+		</div>
+		
+		</div>
+	</div>
+	</div>
+	
+	<!-- --------------------------- ファシリテータ用: 履歴 ----------------------------------->
+	
+	<div id = "wfhistory"  class='wrapper'>
+		<div class='content'>
+			<div class='empty'>表示情報がありません。</div>
+			<table class="tablesorter {sortlist: [[1,1]]}" style="width:100%">
+			<thead>
+				<tr><th></th><th  width = "8em">日時</th><th width = "12em">From</th>
+					<th width = "12em">To/Cc</th>
+					<th width="50em">アクション</th><th>情報</th><th>メッセージ</th></tr>
+			</thead>
+			<tbody>
+
+			</tbody>	
+			</table>	
+		</div>
+	</div>
+	<!-- --------------------------- ファシリテータ用:アクションキュー ----------------------------------->
+	
+	<div id="wfqueue"  class='wrapper'>
+	<!-- <h4>キュー
+		<span style = "margin-left:1em;font-size:small"><button onclick="showWFQueue()">更新</button></span></h4>-->
+		<div class='content'>
+			<div class='empty'>表示情報がありません。</div>
+			<table class='tablesorter'  style="width:100%"><thead>
+					<tr><th>日時</th><th>アクション</th><th>メッセージ</th><th>from</th><th>to</th><th>情報</th></tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<!-- --------------------------- ファシリテータ用:アクショントリガ ----------------------------------->
+
+	<div id="wftrigger"  class='wrapper'>
+	<!-- <h4>トリガ
+	<span style = "margin-left:1em;font-size:small"> <button onclick="showWFTrigger()">更新</button></span></h4>-->
+	<div class='content'>
+		<div class='empty'>表示情報がありません。</div>
+		<table class='tablesorter'  style = "width:100%">
+			<thead>
+				<tr><th>日時</th><th>経過時間(秒)</th><th>ステート</th><th>ステート条件</th><th>メッセージ</th><th>from</th><th>to</th><th>情報</th></tr>
+			</thead>
+			<tbody>
+			</tbody>
+			</table>
+	</div>
+	</div>
+	</div><!-- ファシリテータ画面コンテンツ領域 -->
+</div>
+
+
+<div id = "loading"></div>
+<div id = "balloon" class="balloon"></div>
+<div id = "effect-container"></div>
+
+
+
+<!-- --------------------------- ヘルプ関連 ----------------------------------->
+<div id='helpcontent' style='display:none'>
+	<div id = 'help'>
+	<ul>
+		<li><a href = "#help-actions-container">アクション</a></li>
+		<li><a href = "#help-roles-container">ロール</a></li>
+	</ul>
+	<input type='text' id = 'search-help' size=10 class='searchbox' placeholder='&#xF002;絞り込み' 
+		style='display: inline-block;right: 0.2em; top: -2em;position: relative;'>
+	<div id = "help-actions-container">
+	<table class='tablesorter'>
+		<thead>
+			<tr><th>名前</th><th>説明</th><th>所有者</th><th>ID</th></tr>
+		</thead>
+		<tbody id='help-actions'>
+			<tr><td></td><td></td><td></td><td></td></tr>
+		</tbody>
+	</table>
+	</div>
+	<div id = "help-roles-container">
+	<table class='tablesorter'>
+		<thead>
+			<tr><th>名前</th><th>説明</th><th>自動応答</th><th>備考</th></tr>
+		</thead>
+		<tbody id='help-roles'>
+			<tr><td></td><td></td><td></td><td></td></tr>
+		</tbody>
+	</table>
+	</div>
+	
+</div>
+</div>
+
+
+
+<!-- テンプレート -->
+<script type = "template" id = "processlist-template">
+<tr class='listitem-selectable <%-obj.started ? "process-running":""%> <%-obj.aborted ? "process-aborted" :"" %>' onclick='onSelectProcess(this)'>
+	<td class='process-id'><%-obj.id%></td>
+	<td class='assign-team'><%-obj.team%></td>
+	<td><%-obj.name == "_default_" ? "既定" : obj.name%></td>
+	<td><span class='assign-phase-container'>
+
+	</span>
+	<a class = 'fa fa-forward icon' style='color:green;' href='#' onclick='assign(this);return false;' title='フェーズ番号を選択して演習フェーズを開始します。'>開始</a>
+	<a class = 'fa fa-minus-square icon' style='color:red;' href='#' onclick='abort(this);return false;' title='演習フェーズを中断します。'>中断</a>
+	<a class = 'fa fa-play-circle icon' style='color:blue;' href='#' onclick='resumePhase(this);return false;' title='演習フェーズを再開します。'>再開</a>
+	<a class='fa fa-download icon' href='#' onclick='store(this);return false;' title='演習の状態を保存します。(未実装)'>状態を保存</a>
+	<!--<a class='fa fa-upload icon' href='#' onclick='$(this).next().click();return false;' title='保存したデータから演習の状態を復元します。'>状態を復元</a>-->
+	
+	<input type='file' style='display:none' class='ui-button ui-corner-all ui-widget' 
+		onchange='restore(this);$(this).val("");'></td>
+	<td><%-obj.state%></td>
+	<td><%-obj.score||''%></td>
+	<td><%-obj.started||''%></td>
+	<td class='elapsed'><%-obj.elapsed%></td>
+</tr>
+</script>
+
+<script type = "template" id = "flowstatus-template">
+<%=team%>: シナリオ[<%=scenario == "_default_" ? "既定" : scenario%>] <%=phase!=0?("フェーズ" + Number(phase)):''%> ( 状態:<%=state%>)  
+開始:<%=hasOwnProperty("start")?formatDate(new Date(start)):""%> 制限時間:<%=formatSeconds(timelimit)%> 経過:<%=formatSeconds(elapsed)%> <%=rest>=0?("残り:"+formatSeconds(rest)):("超過:"+formatSeconds(-rest))%>  スコア:<%=score%>
+</script>
+
+
+<script type="template" id="eventlist-template">
+<tr title='<%=title%>' data-eventid='<%=id%>' class = 'listitem-selectable contextmenu'  onclick='selectRow(this)' ondblclick='showRow(this)'>
+	<td></td><td><%=date%></td><td><%=from%></td><td class='tolist'><span class='tocontent'><%=to%>
+<!--		<%=cc?'<button class="expander" onclick="expandList(this)"></button>':''%></span>-->
+		<%=cc ? (";"+cc) : ''%></td>
+	<td><%=formatActionCard(action)%></td>
+	<td class='states'></td>
+	<td><%=message%></td></tr>
+</script>
+<script type = "template" id = "actioncard-template">
+<a href = '#' onclick='onCardClicked(this)' title = '<%=name%>(<%=id%>)
+	<%=hasOwnProperty("description")&&description?(":"+description):""%>' 
+		class='card list-card list-card-action clickable'>
+	 <%=hasOwnProperty("icon") && icon?("<span class='fa fa-icon "+icon + "'></span>"):""%><%=name%></a>
+</script>
+<script type="template" id = "statecard-template">
+<li class = 'card information new-information' clickable 
+	data-cardtype = 'information' onclick='toggleInformation(this)'>
+	<span class = 'timestamp' data-timestamp='<%=when%>'></span>: <%=message%>
+</li>
+</script>
+
+
+<script type="template" id="cardlist-template">
+<tr class='<%=available?"action-available":"action-unavailable"%>' oncontextmenu='showRow(this);return false;' >
+<td><%=id%></td><td title='<%=hasOwnProperty("description")?description:""%>'><span class='<%=hasOwnProperty("icon")?("fa fa-icon "+ icon):""%>'><%=name%></span></td>
+<td><%=hasOwnProperty("description")?description:''%><%=hasOwnProperty("message")?("「"+message+"」"):""%></td><td><%=type%></td>
+<td><%=hasOwnProperty("fired") ? fired : ''%></td>
+<td><%=(hasOwnProperty("roles") && roles?roles:[]).join(',')%> <%=hasOwnProperty("from")?(from+"から"):""%><%=hasOwnProperty("to")?(to+"宛"):""%></td>
+<td><%=hasOwnProperty("attachments")?formatStateCard(attachments, "state"):''%>
+<%=hasOwnProperty("addstate")?formatStateCard(addstate, "addstate"):''%>
+<%=hasOwnProperty("removestate")?formatStateCard(removestate, "removestate"):''%></td>
+<td><%=hasOwnProperty("systemstatecondition")?formatStateCard(systemstatecondition, "condition"):""%></td>
+<td><%=(hasOwnProperty("phase") && phase ?phase:[]).join(',')%></td>
+</tr>
+</script>
+
+<script type = "template" id="statedef-template">
+<tr><td><%=id%></td><td><span class='<%=hasOwnProperty("icon")?("fa fa-icon "+ icon):""%>'><%=name%></span></td>
+<td><%=hasOwnProperty("description")?description:""%></td>
+<td><%=hasOwnProperty("when") ? formatDate(new Date(when)) : ""%></td></tr>
+</script>
+
+<script type="template" id = "reply-template">
+<tr>
+<td><a class='actioncard-ref' href = '#' onclick='showActionCard(this)'><%=hasOwnProperty("actionid")?actionid:""%></a></td>
+<td><%=hasOwnProperty("name")?name:""%> 「<%=hasOwnProperty("message")?message:""%>」</td>
+<td><%=hasOwnProperty("to")?to:""%></td>
+<td><%=hasOwnProperty("state")?formatStateCard(state, "state"):''%>
+<%=hasOwnProperty("addstate") ? formatStateCard(addstate, "addstate"):''%>
+<%=hasOwnProperty("removestate")?formatStateCard(removestate, "removestate"):''%></td>
+<td><%=hasOwnProperty("statecondition")?formatStateCard(statecondition, "condition"):''%></td>
+<td><%=hasOwnProperty("order")?order:""%></td>
+<td><%=hasOwnProperty("delay")?order:""%></td>
+</tr>
+</script>
+
+<script type = "template" id = "contact-template">
+<tr class='<%=online ? "member-online" : "member-offline"%> <%=issystem ?  "member-system" : "member-manual"%>'><td/>
+	<td><a class='<%=hasOwnProperty("icon")?("fa fa-icon "+ icon):""%>' href = '#' onclick='showNotificationDialog("<%=role%>")'><%=rolename%>(<%=role%>)</a></td><td><%=email%></td>
+	<td style='white-space: pre-wrap'><%=hasOwnProperty("desc")?desc:""%></td>
+	<td><%=hasOwnProperty("availableStates")?formatMemberStateCard(availableStates):""%></td>
+	<td><%=hasOwnProperty("systemphase")?systemphase:""%></td>
+</tr>
+</script>
+
+<script type="template" id="presence-template">
+<a title='<%=name%>(<%=email%>) <%=hasOwnProperty('desc')?desc:''%>' 
+	data-userid='<%=email%>' data-cardtype = 'contact'  href = '#' class='card clickable'>
+	<span class='online'></span><span class='self '></span><span class='system'></span>
+<%=rolename%></a>
+</script>
+<script type = "template" id = "phase-template">
+<li>フェーズ<%=phase%>
+<span class='rowlabel'>名前:</span><span class='rowtext'><%=name%></span><br/>
+<span class='rowlabel'>説明:</span><span class='rowtext'><%=description%></span><br/>
+<span class='rowlabel'>作成者:</span><span class='rowtext'><%=author%></span><br/>
+<span class='rowlabel'>Copyright:</span><span class='rowtext'><%=copyright%></span><br/>
+<span class='rowlabel'>バージョン:</span><span class='rowtext'><%=version%></span><br/>
+<span class='rowlabel'>作成日時</span><span class='rowtext'><%=created%></span><br/>
+<span class='rowlabel'>更新日時:</span><span class='rowtext'><%=modified%></span><br/>
+<span class='rowlabel'>更新日時:</span><span class='rowtext'><%=timelimit ? formatSeconds(timelimit):""%></span><br/>
+</li>
+</script>
+
+<script type = "template" id = "trigger-template">
+<tr>
+<td><%=fireWhen%></td>
+<td><%=elapsed%> (発生予想:<%=formatDate(estim)%>)</td>
+<td><%=formatStateCard(state)%></td><td><%=formatStateCard(statecondition)%></td>
+<td><%=(name||'') + ' '+(message||'')%></td><td><%=from%></td>
+<td><%=to%></td><td></td>
+</tr>
+
+</script>
+<script type = "template" id = "scenarioset-template">
+<div style = "max-height:20em;overflow-y:scroll">
+<h4>シナリオセット:<%=name%></h4>
+<div>
+<span class='rowlabel'>名前:</span><span class='rowtext'><%=name%></span><br/>
+<span class='rowlabel'>説明:</span><span class='rowtext'><%=description%></span><br/>
+<span class='rowlabel'>作成者:</span><span class='rowtext'><%=author%></span><br/>
+<span class='rowlabel'>Copyright:</span><span class='rowtext'><%=copyright%></span><br/>
+<span class='rowlabel'>バージョン:</span><span class='rowtext'><%=version%></span><br/>
+<span class='rowlabel'>作成日時</span><span class='rowtext'><%=created%></span><br/>
+<span class='rowlabel'>更新日時:</span><span class='rowtext'><%=modified%></span><br/>
+<ul class='phases'>
+</ul>
+</div>
+</div>
+</script>
+
+<script type = "template" id = "statelist-template">
+<a data-stateid='<%=id?id:''%>' title='<%=name%>(<%=id%><%=hasOwnProperty("description") && description ?(" "+description):""%>)'  
+	<%=hasOwnProperty("icon")?("class='fa fa-icon "+ icon + "'"):""%>' href = '#' onclick='showStateCard(this)'><%=name || id||'?'%></a>
+</script>
+
+<script type = "template" id = "state-template">
+
+<a title='<%=hasOwnProperty('name')?name:''%> <%=hasOwnProperty('description')?description:''%> (<%=id%>)  
+	<%=(hasOwnProperty("effect")&&effect != null)?"イベントには添付情報があります。":""%>' 
+	class='card list-card list-card-state list-card-state-type<%=type%>' 
+	<%=hasOwnProperty('icon')?("<span class='fa fa-icon "+ icon + "'"):""%>
+	href = '#' onclick='playEffect({id:"<%=id%>",name:"<%=name%>",effect:"<%=hasOwnProperty('effect')?effect:''%>"})'>
+<%=name%><span class='<%=hasOwnProperty("effect") && effect != null ?"effect fa fa-icon fa-caret-square-o-right":""%>'</span></a>
+</script>
+
+<script type = "template" id = "statecard-def-template">
+<div id = "statecard-def-dialog">
+<ul>
+	<li>ID:<%=id%></li>
+	<li>名前:<%=name?name:""%></li>
+
+	<li>説明:<%=hasOwnProperty("icon")?("class='fa fa-icon "+ icon + "'"):""%><%=hasOwnProperty("description")?description:""%></li>
+
+	<li <%=_.isEmpty(addStateAction)?'class="hidden"':''%>>次のアクションがシステムステートに追加します(addstate):
+		<span><ul><%=formatActionCard(addStateAction)%></ul></span></li>
+
+	<li <%=_.isEmpty(removeStateAction)?'class="hidden"':''%>>次のアクションがシステムステートから削除します(removestate):
+		<span><ul><%=formatActionCard(removeStateAction)%></ul></span></li>
+
+	<li <%=_.isEmpty(attachmentAction)?'class="hidden"':''%>>次のアクションに添付されます(attachment):
+		<span><ul><%=formatActionCard(attachmentAction)%></ul></span></li>
+	<li <%=_.isEmpty(systemStateConditionAction)?'class="hidden"':''%>>次の自動アクションが実行されます(systemstatecondition):
+		<span><ul><%=formatActionCard(systemStateConditionAction)%></ul></span></li>
+
+
+	<li <%=_.isEmpty(addStateReply)?'class="hidden"':''%>>次のリプライがシステムステートに追加します(addstate):
+		<span><ul><%=addStateReply ? formatReplyCard(addStateReply):""%></ul></span></li>
+
+	<li <%=_.isEmpty(removeStateReply)?'class="hidden"':''%>>次のリプライがシステムステートから削除します(removestatestate):
+		<span><ul><%=removeStateReply?formatReplyCard(removeStateReply):""%></ul></span></li>
+
+	<li <%=_.isEmpty(attachmentReply)?'class="hidden"':''%>>次のリプライに添付されます(state):
+		<span><ul><%=attachmentReply?formatReplyCard(attachmentReply):""%></ul></span></li>
+
+	<li <%=_.isEmpty(stateConditionReply)?'class="hidden"':''%>>次のリプライが適用されます(statecondition):
+		<span><ul><%=stateConditionReply?formatReplyCard(stateConditionReply):""%></ul></span></li>
+</ul>
+</div>
+</script>
+<!-- 
+<script type="template" id="actioncard-simple-template">
+<li class="actioncard-simple"><%=name%>(<%=id%>) <%=description||""%> (<%=actionType(type)%>)</li>
+</script>
+-->
+<script type="template" id="replycard-simple-template">
+<li class="replycard-simple"><%=name%>(<%=actionid%>へのリプライ) 「<%=message||""%> 」(<%=formatStateCard(state)%>) <%=from||"?"%>から<%=to||"?"%></li>
+</script>
+
+<script type="template" id="validate-scenario-template">
+<div>	
+<ul>
+</ul>
+</div>
+</script>
+
+<script type="template" id="validate-scenario-content-template">
+<li class="validate-scenario-result">
+<%=label%>:<%=valid ? ("正常(" + params.count + "個の要素)"):"異常あり"%><br>
+<%=params && params.autoaction>0? ("<dd>"+params.autoaction + "の自動アクション </dd>") : ""%>
+<%=params && params.actions?("<dd>"+params.actions +"の専用アクション </dd>"):""%>
+<%=error && error ? ("<span class='error-info'>"+error+"</span>") : ""%>
+</li>
+</script>
+
+<script type = "template" id = "select2-user-template">
+<span <%=hasOwnProperty('icon') ? ('class="fa fa-icon '+icon + '"') : ''%> title='<%=rolename%>(<%=email%>) <%=hasOwnProperty("desc")?desc :""%>'><%=rolename%></span>
+</script>
+<script type = "template" id = "select2-state-template">
+<span <%=hasOwnProperty('icon') ? ('class="fa fa-icon '+icon + '"') : ''%> title='<%=name%>(<%=id%>) <%=description || ""%>'><%=name||id%></span>
+</script>
+<script type = "template" id = "select2-action-template">
+<span <%=hasOwnProperty('icon') ? ('class="fa fa-icon '+icon + '"') : ''%> title='<%=name%>(<%=id%>) <%=description%>'><%=name||id%></span>
+</script>
+
+<div id = "dialog-container" style="display:none"></div>
+
+
+<div id = 'restore-dialog' style='display:none'>
+<div id = 'restore-detail'></div>
+<input type = 'checkbox' checked >現在時刻を起点にシフト
+</div>
+
+<div id = 'svgcontainer2'></div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+table.tablesorter {
+	font-size: 12px;
+	background-color: white;
+	width: 1024px;
+	border: 1px solid gray;
+}
+table.tablesorter th {
+	text-align: left;
+	padding: 5px;
+	background-color: #c0c0c0;
+}
+table.tablesorter td {
+	/*color: #FFF;*/
+	padding: 5px;
+}
+table.tablesorter .even {
+	background-color: #aDaDaD;
+}
+table.tablesorter .odd {
+	background-color: #cEcEcE;
+}
+table.tablesorter .header {
+	background-image: url(bg.png);
+	background-repeat: no-repeat;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	padding-left: 30px;
+	padding-top: 8px;
+	height: auto;
+}
+table.tablesorter .headerSortUp {
+	background-image: url(asc.png);
+	background-repeat: no-repeat;
+}
+table.tablesorter .headerSortDown {
+	background-image: url(desc.png);
+	background-repeat: no-repeat;
+}

@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "actions.json:アクションカードのセット",
+  "description": "アクションカードのセットを定義します。\nアクションカードは、参加者または自動応答ユーザが自発的に開始することのできる行動を表現します。\nアクションにはtypeプロパティで指定される次の種類があります。\n- share: インシデント情報(ステートカード)を他のユーザに伝達することを目的としたアクション。すべてのシナリオに共通。\n- notification: システムからの参加者へのメッセージ通知のために使用されるアクション。すべてのシナリオに共通。\n- talk: ユーザ間の任意の会話に使用されるアクション。すべてのシナリオに共通。\n- action: 特定のロールを持つユーザが実行できるアクション。シナリオごとに定義する。\n- auto: 自動応答ユーザまたはシステムが演習の進行に応じて実行するアクション。シナリオ毎に定義する。",
+  "type": "object",
+  "$id":"#fricore-schema-actions",
+  "properties": {
+    "version":{
+      "title": "バージョン情報",
+      "description":"このデータのバージョン情報を記述します。",
+      "required":["string"]
+    },
+
+    "actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "description":"アクションカードを定義します。",
+      "title": "アクションカード",
+      "items": {
+        "required": [
+          "name",
+          "type",
+          "id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "アクションの表示名",
+            "description":"アクションカードの表示名を設定します。この名前はイベント一覧に表示されます。"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "action","share","notification","talk","auto"
+            ],
+            "default":"action",
+            "title":"アクションの種類",
+            "description": "アクションの種類を指定します。action,share,notification,talk,autoが使用可能です。",
+            "minLength": 1
+          },
+          "id": {
+            "type": "string",
+            "description": "アクションを識別する一意な文字列を設定します。(必須)",
+            "title": "アクションID",
+            "uniqueItems": true,
+            "required": [
+              "string"
+            ],
+            "minLength": 1
+          },
+          "attach": {
+            "title":"添付",
+            "description":"アクションにステートカードを添付することを許可する場合はtrueを指定します。省略値:false",
+            "type": "boolean"
+          },
+          "roles": {
+            "title":"所有ロール",
+            "description":"このアクションを使用可能なロールのIDの配列を設定します。allを設定するとすべてのユーザが使用可能となります。(必須)",
+            "optional": false,
+            "type": "array",
+            "default":["all"],
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "title":"説明",
+            "description":"アクションの説明を記述します。",
+            "optional": true,
+            "type": "string"
+          },
+          "attachments": {
+            "title":"ステートカード添付",
+            "description": "アクションに添付するステートカードのIDを指定します。省略値:なし",
+            "type": "array",
+            "optional": true,
+            "items": {
+              "type": "number"
+            }
+          },
+          "phase": {
+            "title":"フェーズ",
+            "description": "このアクションが利用可能なフェーズを設定します。フェーズ番号の配列を指定します。省略値：すべてのフェーズで使用可能",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "to":{
+            "type":"string",
+            "title":"宛先",
+            "description": "自動アクションの宛先ロールを指定します。type:autoの場合は必須です。"
+          },
+          "from":{
+            "type":"string",
+            "title":"送信元",
+            "description": "自動アクションの送信元ロールを指定します。type:autoの場合は必須です。"
+          },
+          "addstate":{
+            "title":"追加システムステート",
+            "description": "アクションの受付時に追加するシステムステートを設定します。",
+            "type":"array",
+            "items": {
+              "type":"string"
+            }
+          },
+          "removestate":{
+            "title":"削除システムステート",
+            "description": "アクションの受付時に削除するシステムステートを設定します。",
+            "type":"array",
+            "items": {
+              "type":"string"
+            }
+          },
+          "comment":{
+            "title":"コメント",
+            "description": "アクションに添付するメッセージのデフォルト値を設定します。省略値:なし",
+            "type":"string"
+          },
+          "statecondition":{
+            "title": "ステート条件",
+            "description": "アクションを使用するために必要なステートカードのIDのセットを指定します。ユーザは、このプロパティに指定されたすべてのステートカードを入手しないと、「新規アクション」画面からこのアクションを選択することができません。省略値:なし(常に使用可能)",
+            "type":"array",
+            "items": {
+              "type":"string"
+            }
+          },
+          "timecondition":{
+            "title":"経過時間条件",
+            "description": "前提条件となるアクションを実行後に一定時間経過後にアクションの実行を許可するために使用します。省略値:なし(常に使用可能)",
+            "type":"array",
+            "items": {
+              "prerequisite":{
+                "title":"前提アクション",
+                "description":"アクションを実行するための前提条件となるアクションのIDを指定します。",
+                "type":"string"
+              },
+              "elapsed":{
+                "title":"経過時間",
+                "description":"条件となるアクション実行後の経過時間(秒)を指定します。",
+                "type":"number"
+              }
+            }
+          },
+          "delay":{
+            "title": "自動アクション遅延時間",
+            "description": "自動アクションが実行可能になってから実行するまでの遅延時間(秒)を指定します。",
+            "type":"number"
+          },
+          "systemstatecondition":{
+            "title": "システムステート条件",
+            "description":"自動アクション(type:auto)の実行の契機となるシステムステートのIDと論理演算子を指定します。省略値:なし(無条件に実行する)",
+            "type":"array",
+            "items": {
+              "type":"string"
+            }
+          },
+          "icon":{
+            "title": "アイコン",
+            "description":"カードを表示する際に、html要素にclass値を付加します。Font Awesomeのアイコンを使用することを想定しています。",
+            "type":"string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "actions"
+  ]
+}

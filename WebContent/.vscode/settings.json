@@ -1,0 +1,11 @@
+{
+	"json.schemas": [
+        {"fileMatch": ["/data/contacts.json"],"url":"./schema/contacts.json"},
+        {"fileMatch": ["/data/roles.json"],"url":"./schema/roles.json"},
+        {"fileMatch": ["/data/actions.json"],"url":"./schema/actions.json"},
+        {"fileMatch": ["/data/replies.json"],"url":"./schema/replies.json"},
+        {"fileMatch": ["/data/setting.json"],"url":"./schema/setting.json"},
+        {"fileMatch": ["/data/states.json"],"url":"./schema/states.json"}
+    ]
+
+}

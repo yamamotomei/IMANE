@@ -1,0 +1,8 @@
+{
+  "teams":[
+    {"id":"sample.com","name":"SampleConpany"}
+  ],
+  "phases":[
+    {"phase":1,"description":"phase1","timelimit":1200,"endstate":[]}
+  ]
+}
