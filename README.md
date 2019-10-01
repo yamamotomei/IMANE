@@ -1,6 +1,5 @@
 # Imanex (Incident manegement networking excercise) 
 
-ルトさんに聞く
 
 # Getting Started / スタートガイド
 
