@@ -3,7 +3,7 @@
 
 # Getting Started / スタートガイド
 
-インストール、実行の手順については別紙を参照してください(編集中)
+インストール、実行の手順についてはIMANE_PC_サーバー環境構築と演習開始方法のPDFを参照してください
 
 # Versioning / バージョン管理
 
@@ -14,11 +14,11 @@ For the versions available, see the tags on this repository.
 
 # /バグ報告、機能リクエストについて
 
-バグ報告、機能リクエストはテンプレートに従ってissueを発行してください。(編集中)
+バグ報告、機能リクエストはテンプレートに従ってissueを発行してください。
 
 # Authors / 著者
 
-TsurunaiGO team
+TsurumaiGO team
 + tsurumaigo@manage.nitech.ac.jp
 
 # License / ライセンス
