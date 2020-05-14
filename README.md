@@ -7,7 +7,7 @@
 
 # Versioning / バージョン管理
 
-For the versions available, see the tags on this repository.
+For the versions are available, see the tags on this repository.
 
 利用可能なバージョンはこのリポジトリのタグを参照してください。安定版と開発版の記入、システムとシナリオの互換性
 詳しいバージョン歴は他のファイルに記入。日付の記入。(編集中)
