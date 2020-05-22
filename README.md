@@ -1,14 +1,5 @@
-<<<<<<< HEAD
-=======
-# Imanex (Incident manegement networking excercise) 
->>>>>>> refs/remotes/origin/master
-
 # Imanex (Incident management networking exercise) 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/master
 # Getting Started / スタートガイド
 
 インストール、実行の手順についてはIMANE_PC_サーバー環境構築と演習開始方法のPDFを参照してください
