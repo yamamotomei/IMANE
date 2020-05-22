@@ -48,9 +48,7 @@ public class ProcessInstanceManager {
 		public void logout() {}
 	}
 	public Session session;
-	protected ProcessInstanceManager() {
-		System.err.println("ProcessInstanceManager was instanciated.");
-
+	public ProcessInstanceManager() {
 	}
 	@Singleton
 	static ProcessInstanceManager me  = null;

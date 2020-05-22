@@ -187,8 +187,6 @@ function info(msg){
 	dialog(m,"ok", "情報");
 }
 
-
-
 /**オンラインかつフェーズ進行中になったときの処理*/
 function onOnline(){
 	$('.live').removeClass('offline').addClass('online');
@@ -208,9 +206,6 @@ function balloon(selector, text){
 	$(selector).on('mouseover', function(e){
 		$('#balloon').text(text);
 		var pos = e.target.getBoundingClientRect();
-/* 		var box = $(element);
-		var pos = box.length != 0 ? box[0].getBoundingClientRect() : {x:0, y:0};
- */
 		var top = pos.y-40;if(top<0)top = 0;
 		var left = pos.x-100;if(left<0)left=0;
  		$('#balloon').css('left',left).css('top',top);
@@ -311,7 +306,7 @@ function renderCards(resp){
 		adjustTimestamp();
 	}
 }
-//--->
+
 /**静的なファイルをGETでロード
  * 
  */
@@ -519,7 +514,6 @@ function downloadScenarioSet(){
 	//
 	window.open(url);
 }
-
 
 /**静的な定義データをロード*/
 function loadCards(){
@@ -758,11 +752,6 @@ Dragger.prototype.init = function(selector){
 		var trans = $(this.target)[0].currentTranslate;
 		param.x /= scale;
 		param.x -= trans.x;
-		//param.x +=
-		
-		
-		//param.x *= ratio;
-		//param.width *= ratio;
 		var box = createSVG('rect', param);
 		$(this.target).prepend(box);
 		return false;
@@ -951,7 +940,7 @@ $(function(){
 		}else if($('#history').is(':visible')){
 			mainform = '#history';
 		}
-		var validarea= /*$(window).height()*/window.innerHeight-$(mainform).offset().top; - $('#header').height() - $('#product-info').outerHeight() ; // - 4;
+		var validarea= window.innerHeight-$(mainform).offset().top; - $('#header').height() - $('#product-info').outerHeight() ;
 		$(mainform).height(validarea);
 
 		$('#facilitator-main').height(validarea- $('#facilitator-main').offset().top);
@@ -961,7 +950,6 @@ $(function(){
 		
 		var rects = {'window':$(window).height(),'#wfview':$('#wfview').height(), '#facilitator-main':$('#facilitator-main').height(),
 				'.ui-accordion':$('#facilitator-main .ui-accordion').height(),};
-//		console.log('resized: ' + JSON.stringify(rects));
 
 		var panel = $('#facilitator-main .ui-tabs-panel:visible');
 		if(panel.length != 0){
@@ -1016,7 +1004,6 @@ function formatActionSelection(el){
 			console.log(t);
 			return el.text;
 		}
-
 	}
 	return el.text;
 }
@@ -1032,7 +1019,6 @@ function formatStateSelection(el){
 			console.log(t);
 			return el.text;
 		}
-
 	}
 	return el.text;
 }
@@ -1078,8 +1064,6 @@ function setContextMenu2(a){
 		}
 	});
 	return false;
-	
-	
 }
 function toggleMark(el){
 	if(el.hasClass('marked')){//マークが解除されたらイベントIDを削除
@@ -1216,7 +1200,7 @@ function updateWorkflowInfo(){
 		onOnline();
 	})
 	.fail(function(xhr){
-//コンソールログがうるさいので
+//  コンソールログがうるさいので
 	});
 	
 	if($('#facilitator-main').is(":visible") && FRICORE.isadmin && FRICORE.usersession){
@@ -1359,7 +1343,6 @@ function showActionDialog(type, tgt, toaddr){
 
 	var to = $('.set-to').find('select');to.empty();to.append('<option selected value=0></option>');
 	var cc = $('.set-cc').find('select');cc.empty();cc.append('<option value=0></option>');
-	//操作の順番によってプレゼンスが取得できていない場合がある
 	
 	refreshPresence();
 	var recipients = injection ? FRICORE.presence : sortMembers();
@@ -1429,10 +1412,10 @@ function showActionDialog(type, tgt, toaddr){
 				if(!FRICORE.debug){
 					$(e).prop('disabled', 'disabled');
 				}
-				var a = $(e);//.attr('data-carddata', JSON.stringify(s));
+				var a = $(e);
 				container.append(a);
 			}else{
-				var a = $(e);//.attr('data-carddata', JSON.stringify(s));
+				var a = $(e);
 				container.append(a);
 			}
 		});
@@ -1502,7 +1485,6 @@ function showActionDialog(type, tgt, toaddr){
 	}});
 }
 
-
 /**アクションが実行可能かを評価*/
 function isActionAvailable(act){
 	if(FRICORE.debug || FRICORE.isadmin)	return true;
@@ -1512,8 +1494,6 @@ function isActionAvailable(act){
 			return false;
 	}
 	
-	
-	//2018.4.3 ステート条件を演算子対応
 	if(!act.statecondition || act.statecondition.length == 0)	return true;
 	var statecards = FRICORE.debug ? FRICORE.states : FRICORE.availableStates;
 	var ret = evaluateStates(statecards, act.statecondition, "AND");
@@ -1528,10 +1508,7 @@ function isActionAvailable(act){
 		});
 		FRICORE.availableStates = _.union(FRICORE.availableStates, buff);
 	}
-	
-	
 	return ret;
-//	return true;
 }
 
 
@@ -1580,11 +1557,9 @@ function hasAllStates(target, arg){
 	return true;
 }
 function HasState(statecards,arg){
-	//for(var i = 0; i < arg.length; i ++){
 	var statecards = FRICORE.debug ? FRICORE.states : FRICORE.availableStates;
 		if(!_.findWhere(statecards, {id:arg}))
 			return false;
-	//}
 	return true;
 }
 
@@ -1594,67 +1569,14 @@ function HasState(statecards,arg){
  * @param{string} defaultOperation デフォルトの演算
  * */
 
-/*function evaluateStates(memberStates, condition, defaultOperation){
-var cond1=[];
-var cond2=[];
-var Fnot = 0;
-var LNo = 0;
-for(var i=0;i<condition.length;i++){
-	if(LNo<1){
-		cond1.push(condition[i]);
-		if(condition[i]=="NOR"||condition[i]=="NAND"){
-			Fnot+=1;
-			LNo+=1;
-		}else if(condition[i]=="AND"||condition[i]=="OR"){
-			LNo+=1;
-		}else{
-			
-		}
-	}else{
-		cond2.push(condition[i]);
-		if(condition[i]=="NOR"||condition[i]=="NAND"){
-			Fnot+=1;
-			LNo+=1;
-		}else if(condition[i]=="OR"||condition[i]=="AND") {
-			LNo+=1;
-		}else{
-			
-		}
-		
-	}
-}
-switch(LNo){
-       case 0:
-          return evaluateStates0(memberStates,cond1,defaultOperation);
-          break;
-       case 1:
-          return evaluateStates0(memberStates,cond1,cond1[cond1.length-1]);
-          break;
-       case 2:
-          var ret1= evaluateStates0(memberStates,cond1,cond1[cond1.length-1]);
-          var ret2= evaluateStates0(memberStates,cond2,cond2[cond2.length-1]);
-          return ret1 && ret2
-          break;
-          
-}
-var p = parseStateCondition(condition, defaultOperation);
 
-var and = p.operator== "AND" || p.operator == "NAND";
-var not = p.operator=="NAND" || p.operator== "NOR" || p.operator== "NOT";
-
-var result = and ? hasAllStates(memberStates, p.condition) : hasStates(memberStates, p.condition);
-
-var ret =  (not ? !result : result);
-return ret;
-}
-*/
 function SplitElm(str0){
 	    var buf=[];
 	    var str1,str2,str3;
 	    var P0,P1,P2;
 	    var ic,jc,kc;
 	    var flag=0;
-	    buf = Array(20);
+	    buf = Array(60);
 	    var ic=0;
 	    P0=str0.indexOf(",");
 	    P1=str0.indexOf("(");
@@ -1859,7 +1781,7 @@ function validateActionInput(){
 			showInputError('.set-comment',"「話し合い」を行うには、メッセージを入力してください。");
 			result = false;
 		}
-	}else if(type == 'share' || actionid == 'i0009'){//#17
+	}else if(type == 'share' || actionid == 'i0009'){
 		var state = $('.set-state>select').val();
 		if(!state || state.length == 0){
 			showInputError('.set-state',"「インシデント情報共有」を行うには、共有したいインシデント情報を選択してください。");
@@ -2078,7 +2000,7 @@ function resume(){
 
 	var scale = $('#mermaidChart0')[0].currentScale;
 	$('#mermaidChart0')[0].currentScale=1;
-	$('#mermaidChart0')[0].currentTranslate.x=0;// = {x:0,y:0};
+	$('#mermaidChart0')[0].currentTranslate.x=0;
 	fitSVG();
 
 	window.zoomratio=1;
@@ -2518,8 +2440,6 @@ function makePhaseChooser(container, team){
 	if($(container).length == 0) return;
 	$(container).empty();
 	_.each(window.FRICORE.setting.phases, function(phasedef){
-//		var p = {};Object.assign(p, phasedef);
-		//var p = {};$.extend(p, phasedef);
 		var p = JSON.parse(JSON.stringify(phasedef));
 		p.team=team;
 		p.id = ["assign-phase",p.phase,p.team].join('-');
@@ -2540,7 +2460,6 @@ function getProcess(params, select){
 	makePhaseChooser($('.assign-phase-container-all'), "all");
 
 	var url = "workflow/process/swsc_incident/";
-//	var params = {"swsc_coe_teamname":""};
 	var params = {"duration":3};
 	var re = doRequest(url, "GET", params)
 		.done(function(resp, msg, xhr){
@@ -2797,7 +2716,6 @@ function getState(team){
 		$('#wfstatus').find('.state').find("tbody").empty(); 
 		FRICORE.states = resp;
 		_.each(resp, function(e){
-//var tr = _.template("<tr><td><%=id%></td><td><%=name%></td><td><%=when ? formatDate(new Date(when)) : ''%></td></tr>", e);	
 			var tr = _.template($("#statedef-template").html(), e);		
 			$('#wfstatus').find('.state').find("tbody").append($(tr)); 
 		});
@@ -2943,10 +2861,11 @@ function escape(str){
 
 /**イベント受信/取得処理
  */
-//showWFHistoryとほぼ共通
+//一覧更新用
 function onLoadEvent(data, showHidden){
 	var effects = [];
 	FRICORE.events.push(data);
+//	if(!showHidden && data.level & 0xf0)	return;//演習中は非表示のイベント
 	if(!showHidden && 
 		(data.type == "null" || data.reply && data.reply.type=="null"))	
 		return;//演習中は非表示のイベント
@@ -3019,7 +2938,7 @@ function onLoadEvent(data, showHidden){
 					console.log('新しいステートカードを獲得:' + org.name);
 					FRICORE.availableStates.push(org);
 					if(org.type != 0){
-						onSpecialState(org.type);
+						//onSpecialState(org.type);
 					}
 					if(org.effect){
 						effects.push(org);
@@ -3040,9 +2959,125 @@ function onLoadEvent(data, showHidden){
 	if(data.reply && data.reply.state){
 		console.log("WARN: リプライにステートカードが入っている");
 	}
-	warn(formatDate(new Date()) + ": 新着イベントがあります。");
+	//warn(formatDate(new Date()) + ": 新着イベントがあります。");
+//	tbl.append($(tr).attr('data-carddata', JSON.stringify(data)));
 
 	tbl.append($(tr));//.attr('data-carddata', JSON.stringify(data)));
+//	ftbl.append($(tr).clone().attr('data-carddata', JSON.stringify(data)));
+	
+	ftbl.append($(tr).clone());//.attr('data-carddata', JSON.stringify(data)));
+
+	$('#event-list .searchbox').quicksearch('#event-list table tbody tr');
+	$('#event-list').find('.tablesorter').trigger('update');
+	
+	
+	if(effects){
+		effects.forEach(function(e){
+			playEffect(e);
+		});
+	}
+}
+
+//showWFHistoryとほぼ共通
+//一覧更新用
+function onLoadEvent2(data, showHidden){
+	var effects = [];
+	FRICORE.events.push(data);
+//	if(!showHidden && data.level & 0xf0)	return;//演習中は非表示のイベント
+	if(!showHidden && 
+		(data.type == "null" || data.reply && data.reply.type=="null"))	
+		return;//演習中は非表示のイベント
+	if(data.reply && data.reply.type=="hidden")
+		return;//空応答
+    var ida = window.localStorage.getItem("kagi");//localStorageの中身を取得
+    var hairetsu = JSON.parse(ida);//localStorageの中身を配列に変換
+    if(!hairetsu){
+    	hairetsu=[];
+    }
+	if(data.reply){
+		var exists = $('#event-list tr[data-eventid=' + data.reply.id + ']');
+		if(exists && exists.length>0)	return;//重複
+	}
+	if(data.action && data.action.type == "alert"){
+		warn("システムからの警告:" + data.message);
+		return;
+	}
+	
+	var tbl = $('#event-list').find('tbody');
+	var ftbl = $('#wfhistory').find('tbody');
+	var cclist = data.cc ? _.map(data.cc, function(e){return e.rolename;}).join(";") : "";
+
+	var msg = compressMessage(data);
+	var d = {date:formatDate(new Date(data.replyDate ? data.replyDate : data.sentDate)), 
+			from: data.from.rolename, to: data.to.rolename, cc:cclist, 
+		action:data.action, message:msg, id:data.id};
+
+	d.title = escape(_.template("日時:<%=date%>\nFrom:<%=from%>\nTo:<%=to%>\n\n<%=action.name%>:<%=message%>", d));
+	var e = _.template($('#eventlist-template').html(), d);
+	var tr = $(e);
+	if(data.replyTo){
+		var r = summerizeMessage(data.replyTo);
+		r  ="<br><span class='replyTo' title='"+summerizeMessage(data.replyTo)+"'>返信元:" + r + "</span>"
+		$(tr).children("td").last().append(r);
+	}
+
+	if(data.from.email==FRICORE.usersession.userid){//fromが自分でない
+		$(tr).children("td").first().append($('<span class="fa fa-level-up" style="color:blue" tytle="送信"></span>'));
+		
+	   }else{
+		$(tr).children("td").first().append($('<span class="fa fa-level-down" style="color:green" title="受信"></span>'));
+	}
+	if(hairetsu.length == 0){
+	}else{
+		while (hairetsu.length>0){
+		  var atai = hairetsu[0];
+		  if(data.id==atai){
+			  toggleMark(tr);
+			}	
+		
+		  hairetsu.shift();
+		}
+	}
+	var cards = [];
+	if(data.action.attachments)	cards = _.union(cards, data.action.attachments);
+	if(data.reply && data.reply.state)	cards.push(data.reply.state);
+	if(data.action.statecards)	cards = _.union(cards,data.action.statecards);
+	
+	if(cards && cards.length != 0){//ステートカードGET
+		_.each(cards, function(i){
+			var org=_.findWhere(FRICORE.states, {id:i});
+			var current=_.findWhere(FRICORE.availableStates, {id:i});
+			if(!current){
+				if(org){
+					console.log('新しいステートカードを獲得:' + org.name);
+					FRICORE.availableStates.push(org);
+					if(org.type != 0){
+						//onSpecialState(org.type);
+					}
+					if(org.effect){
+						effects.push(org);
+					}
+				}else{
+					console.log("不明なステートカード:" + i);
+				}
+			}
+			if(!org){
+				org = {name:"不明なステートカード:"+i, id:i, description:"未定義のカードがイベントで通知されました。", type:0};
+			}
+		//	var el = _.template("<a title='<%=name%>\n<%=description%>' class='card list-card list-card-state list-card-state-type<%=type%>'><%=name%></a>", org);
+			var el = _.template($("#state-template").html(), org);
+			tr.find(".states").append($(el));
+		});
+	}
+	
+	if(data.reply && data.reply.state){
+		console.log("WARN: リプライにステートカードが入っている");
+	}
+	//warn(formatDate(new Date()) + ": 新着イベントがあります。");
+//	tbl.append($(tr).attr('data-carddata', JSON.stringify(data)));
+
+	tbl.append($(tr));//.attr('data-carddata', JSON.stringify(data)));
+//	ftbl.append($(tr).clone().attr('data-carddata', JSON.stringify(data)));
 	
 	ftbl.append($(tr).clone());//.attr('data-carddata', JSON.stringify(data)));
 
@@ -3188,7 +3223,6 @@ function showEventDetail(evt){
 			console.log("statecard not owned.id:" + sid);
 		}
 	});
-
 	
 	var wf = FRICORE.workflowstate;
 	if(FRICORE.isadmin){
@@ -3198,7 +3232,6 @@ function showEventDetail(evt){
 	var pointkeys = _.keys(wf.pointchest);
 	_.each(pointkeys, function(k){
 		if(k==d.id){
-			var dummy=0;//TODO:概要をリロードしないといけない
 			var pointdata = wf.pointchest[d.id];//array
 			_.each(pointdata, function(p){
 				var pe = _.template("<span class='card list-card list-card-point' title='<%=description%>'><%=name%>: <%=point%>点</span>", p);
@@ -3236,7 +3269,6 @@ function renderPresence(presence){
 		var online = c.online;
 		var system = c.system;//TODO:
 		var t = _.template($("#presence-template").html(), c);
-	//			"<a title='<%=name%>(<%=email%>) <%=hasOwnProperty('desc')?desc:''%>' data-userid='<%=email%>' data-cardtype = 'contact'  href = '#' class='card clickable'><span class='online'></span><span class='self '></span><span class='system'></span><%=rolename%></a>", c);
 		var m = $(t).data('card', c).on('click', function(e){
 			onCardClicked(e);
 		});
@@ -3505,12 +3537,8 @@ function summerizeDiagramLine(data){
 
  /**イベントデータに紐づいたポイントカードを取得*/
  function extractPointCard(data){
-	 var wf = getSelectedTeamWorkflow().workflow||FRICORE.workflowstate;
+	var wf = getSelectedTeamWorkflow().workflow||FRICORE.workflowstate;
 
-/*  	var p = _.findWhere(wf.pointchest, function(e){
- 		return data.id == e.id;
- 	});
- */
 	var p = wf.pointchest ? wf.pointchest[data.id] : [];
 	var names = _.map(p, function(e){return e.name;});
  	return names;
@@ -3522,27 +3550,19 @@ function summerizeDiagramLine(data){
  }
  /**シーケンス図のイベント行を作成*/
 function makeDiagramLine(hist){
-
-	 //TODO:ここでイベントフィルタ処理
-	//2018.6.13
-		var toIsVisible = validateRoleFilter(hist.to.role) ;
-		var fromIsVisible = validateRoleFilter(hist.from.role);
-		if(!toIsVisible || !fromIsVisible){
-			try{
-				console.log("イベント表示がフィルタされました。" + hist.from.role + "->"+hist.to.role);
-			}catch(t){}
-			return null;
-		}
-		//-->
-	
+	var toIsVisible = validateRoleFilter(hist.to.role) ;
+	var fromIsVisible = validateRoleFilter(hist.from.role);
+	if(!toIsVisible || !fromIsVisible){
+		try{
+			console.log("イベント表示がフィルタされました。" + hist.from.role + "->"+hist.to.role);
+		}catch(t){}
+		return null;
+	}
 	
 	var statecards = extractStateCard(hist)||'';
  	var pointcards = extractPointCard(hist)||'';
- 	//TODO:ポイントカードを付与
  	
-//	var data = {from:hist.from,to:hist.to,sentDate:hist.sentDate,action:hist.action,message:hist.message.replace(/\r?\n/g, "\\n"),inf:hist.inf.replace(/\r?\n/g, "\\n")};
 	var when = formatDate(hist.replyDate ? hist.replyDate : hist.sentDate);
-	//var online = //!window.matchMedia("(min-width: 2000px)").matches;//印刷画面でなかったら詳細メッセージを隠す
 	var online = $("#hide-detail").is(":checked");
 	var msg = summerizeDiagramLine(hist);
 	if(!hist.from || !hist.to){
@@ -3680,7 +3700,6 @@ function processWFHistory(resp, renderDiagram){
 			_.each(cards, function(i){
 				var org=_.findWhere(FRICORE.states, {id:i});
 				if(org){
-//					var el = _.template("<a title='<%=name%>\n<%=description%>' class='card list-card list-card-state list-card-state-type<%=type%>'><%=name%></a>", current);
 				}else{
 					org = {name:"不明なステートカード:"+i, id:i, description:"未定義のカードがイベントで通知されました。", type:0};
 				}
@@ -3716,7 +3735,6 @@ function processWFHistory(resp, renderDiagram){
 			var arr = makeDiagramLine(data);
 			if(arr)
 				seq = _.union(seq, arr);
-			
 			
 		}
 	});

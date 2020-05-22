@@ -33,8 +33,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.mozilla.universalchardet.UniversalDetector;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tsurumai.workflow.WorkflowService;
 
@@ -363,25 +361,7 @@ public class Util {
 			throw new IOException("I/O error: "+new File(path).getAbsolutePath() +" " +t.getMessage(), t);
 		}
 	}
-	
-	//TODO: experimental: UniversalDetectorを使ってみる
-	public static String _loadTextFile(final String path) throws IOException{
-		
-		try(InputStream strm = new FileInputStream(path);ByteArrayOutputStream out = new ByteArrayOutputStream()){
-			UniversalDetector dt = new UniversalDetector(null);
 
-			for(int c = 0;(c = strm.read()) != -1;){
-				out.write(c);//最後まで読む
-			}
-			dt.handleData(out.toByteArray(), 0, out.size());
-			String cs = dt.getDetectedCharset();
-			dt.reset();
-			return new String(out.toByteArray(), cs);
-			
-		}catch(IOException t) {throw t;}
-	}
-	
-	
 	public static byte[] loadFile(final String path) throws IOException{
 
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));

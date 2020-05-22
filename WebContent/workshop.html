@@ -1,5 +1,5 @@
 <html lang="ja" >
-<!-- Copyright 2017,2018 Fujitsu Limited -->
+<!-- Copyright 2018,2019 NIT -->
 <head>
 <meta charset="UTF-8">
 <title>FrICORE</title>
@@ -292,7 +292,7 @@
 
 
 
-<div id = "svgctrl">
+<div id = "svgctrl" style = "display:none">
 	<button onclick="zoomin()" title='チャートを10%拡大します。'>拡大</button>
 	<button onclick="zoomout()" title='チャートを10%縮小します。'>縮小</button>
 	<button onclick="trim()" title='チャートをドラッグして選択した範囲を拡大表示します。'>トリム</button>
@@ -331,7 +331,7 @@
 
 <div id = "wfview" class='main' style = "display:none;position:relative;top:0;width:99%;">
 	<div id  = "processlist" class='wrapper' style='width:100%;position:relative;'>
-	<h4>演習シナリオ
+	<h4 style = "display:none">演習シナリオ
 		<span class='ctrl '>
 			シナリオセット:<select class='scenarioset' style = 'width:10em;' onchange='onScenarioChanged()'></select>
 				<a class='fa fa-file-text-o icon' style='color:blue;' href='#' 
@@ -575,9 +575,9 @@
 
 	</span>
 	<a class = 'fa fa-forward icon' style='color:green;' href='#' onclick='assign(this);return false;' title='フェーズ番号を選択して演習フェーズを開始します。'>開始</a>
-	<a class = 'fa fa-minus-square icon' style='color:red;' href='#' onclick='abort(this);return false;' title='演習フェーズを中断します。'>中断</a>
-	<a class = 'fa fa-play-circle icon' style='color:blue;' href='#' onclick='resumePhase(this);return false;' title='演習フェーズを再開します。'>再開</a>
-	<a class='fa fa-download icon' href='#' onclick='store(this);return false;' title='演習の状態を保存します。(未実装)'>状態を保存</a>
+	<a class = 'fa fa-minus-circle icon' style='color:red; display:none' href='#' onclick='abort(this);return false;' title='演習フェーズを中断します。'>中断</a>
+	<a class = 'fa fa-play-circle icon' style='color:blue; display:none' href='#' onclick='resumePhase(this);return false;' title='演習フェーズを再開します。'>再開</a>
+	<a class='fa fa-download icon' style='color:blue; display:none' href='#' onclick='store(this);return false;' title='演習の状態を保存します。(未実装)'>状態を保存</a>
 	<!--<a class='fa fa-upload icon' href='#' onclick='$(this).next().click();return false;' title='保存したデータから演習の状態を復元します。'>状態を復元</a>-->
 	
 	<input type='file' style='display:none' class='ui-button ui-corner-all ui-widget' 

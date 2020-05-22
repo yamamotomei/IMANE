@@ -1,6 +1,6 @@
 {
   "teams":[
-    {"id":"sample.com","name":"SampleConpany"}
+    {"id":"SampleCompany.com","name":"SampleCompany"}
   ],
   "phases":[
     {"phase":1,"description":"phase1","timelimit":1200,"endstate":[]}

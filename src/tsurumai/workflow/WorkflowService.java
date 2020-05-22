@@ -448,7 +448,6 @@ public class WorkflowService extends Application implements ServletContextListen
 			ArrayList<ProcessInstance> ret = new ArrayList<>();
 			for(String team : teamsdef.keySet()){
 				WorkflowInstance inst = getWorkflowInstance(team);
-				//TODO: 2019.8.2 
 				if(mgr.isValidProcess(inst.pid)) {
 					ProcessInstance p = mgr.getProcessInstance(inst.pid);
 					p.workflow = inst;
@@ -457,13 +456,6 @@ public class WorkflowService extends Application implements ServletContextListen
 				}else {
 					logger.warn("プロセスインスタンスが不正です。pid=" + String.valueOf(inst.pid));
 				}
-				
-//					ProcessInstance p = mgr.startProcessInstance();
-//					if(inst == null)inst = WorkflowInstance.newInstance(this,  team, p.getId());
-//					p.workflow = inst;
-//					p.name = activeScenario;
-//					ret.add(p);
-				
 			}
 
 			ProcessInstance[] r = ret.toArray(new ProcessInstance[ret.size()]);
@@ -1271,7 +1263,6 @@ public class WorkflowService extends Application implements ServletContextListen
 		}finally{
 			exit();
 		}
-
 	}
 	
 	/**リプライカードのリストを取得する。
@@ -1354,8 +1345,6 @@ public class WorkflowService extends Application implements ServletContextListen
 		}
 		return Response.status(Response.Status.NOT_FOUND).build();
 	}
-	
-
 	
 	/**ワークフローインスタンスデータをアップロードし、状態を復元します。インスタンスは中断状態になります。
 	 * <p class = "interface">POST /diag/{teamname}/upload</p>
@@ -1513,19 +1502,6 @@ public class WorkflowService extends Application implements ServletContextListen
 		
 	}
 
-	/**デバッグ用: スクリプトを評価
-	 * @deprecated 未実装/未検証
-	 * */
-	@Path("/diag/{teamname}/eval")
-	@POST
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-//	public String evaluate(@PathParam("teamname") String teamname, @FormParam("script") String scr){
-//		WorkflowInstance wf = this.getWorkflowInstance(teamname);
-//		String ret = wf.getScriptEvaluator().evaluateScript(scr);
-//		return ret;
-//	}
-	
 	/**ロギング*/
 	public void enter() {
 		if (request != null) {
@@ -1539,15 +1515,12 @@ public class WorkflowService extends Application implements ServletContextListen
 		}
 	}
 
-
 	/**ログインユーザに新しいセションを割り当てる*/
 	public static synchronized void newSession(final String skey, ProcessInstanceManager mgr) throws WorkflowException {
 		if (skey == null || skey.length() == 0 || mgr == null)
 			throw new WorkflowSessionException("セションの割り当てに失敗しました。");
 		sessionCache.put(skey, mgr);
 	}
-
-
 
 	/**シナリオリソースを取得する
 	 * @param name アクティブなシナリオ格納ディレクトリからの相対パス

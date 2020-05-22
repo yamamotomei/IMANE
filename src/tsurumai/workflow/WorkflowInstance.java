@@ -18,11 +18,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-//import javax.script.Invocable;
-//import javax.script.ScriptEngine;
-//import javax.script.ScriptEngineManager;
-//import javax.script.ScriptException;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,7 +39,7 @@ import tsurumai.workflow.util.Util;
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 
 /**操業レベル定義
- * @deprecated*/
+ * @deprecated 操業レベルに関する処理は廃止されました*/
 class OperationLevelDef implements Comparable<OperationLevelDef>{
 	
 	/**フェーズ開始からの経過時間(秒)**/public int time;
@@ -254,7 +249,6 @@ public class WorkflowInstance {
 		}
 	}
 	
-	
 	protected WorkflowService caller = null;
 	protected Worker worker = null;
 	public static WorkflowInstance newInstance(WorkflowService caller, final String team, long pid){
@@ -378,11 +372,6 @@ public class WorkflowInstance {
 
 	protected boolean isRunning(){return State.STARTED.equals(this.state);}
 	
-	/**状態を保存*/
-	public void store(){}
-	/**状態を復元・再開*/
-	public void restore(){}
-	
 	/**アクション要求を処理する
 	 * */
 	public void requestAction(CardData action, Member from, Member to, Member[] cc, NotificationMessage reply) throws WorkflowException{
@@ -390,11 +379,9 @@ public class WorkflowInstance {
 	}
 
 	/**アクション要求を受け付ける
-	 * 
 	 * */
 	protected void acceptAction(CardData action, Member from, Member to, Member[] cc, NotificationMessage reply){
 
-		
 		logger.info("action accepted. from:" +
 				(from !=null ? from.toString() : "nul") +",to:"+ (to != null ? to.toString()  : "null") + 
 					",cc:" + Util.toString(cc!= null ?  cc.toString() : "null") + ",action:"+action.toString());
@@ -426,7 +413,6 @@ public class WorkflowInstance {
 			return;
 		}
 		
-		//TODO: 実装中:中止系アクションの処理
 		if(action.abortaction  != null && action.abortaction.length() != 0){
 			int c = countQueuedAction(new String[]{action.abortaction});
 			if(c ==  0){
@@ -440,8 +426,6 @@ public class WorkflowInstance {
 			logger.warn("アクションに対する応答が見つかりません。" + action.toString());
 		}
 		acceptAction(action, from, to, cc,reply);
-
-
 	}
 	/**受け付けたアクションをキューに入れ、受付通知を発行*/
 	protected void enqueueAction(NotificationMessage msg){
@@ -611,122 +595,13 @@ public class WorkflowInstance {
 		}
 	}
  
-	/**ステート条件を評価する*/
-/*	protected  boolean evaluateMemberStateCondition0(final String userid,final String cond[], final Operator defaultOperation) {
-		List<String> list1 = new ArrayList<String>();
-		List<String> list2 = new ArrayList<String>();
-		int Fnot = 0;
-		int LNo = 0;
-		if(cond==null) {
-			return true;
-		}
-		for(int i = 0; i <cond.length; i++){
-			if(LNo<1){
-				list1.add(cond[i]);
-				if(cond[i].indexOf("NOR")!=-1||cond[i].indexOf("NAND")!=-1||cond[i].indexOf("NOT")!=-1){
-					Fnot+=1;
-					LNo+=1;
-				}else if(cond[i].indexOf("OR")!=-1||cond[i].indexOf("AND")!=-1){
-					LNo+=1;			
-				}else {
-					
-				}
-			}else {
-				list2.add(cond[i]);
-				if(cond[i].indexOf("NOR")!=-1||cond[i].indexOf("NAND")!=-1||cond[i].indexOf("NOT")!=-1){
-					Fnot+=1;
-					LNo+=1;
-				}else if(cond[i].indexOf("OR")!=-1||cond[i].indexOf("AND")!=-1){
-					LNo+=1;			
-				}else {
-					
-				}
-			}
-		}
-		String[] condA = list1.toArray(new String[list1.size()]);
-		String[] condB = list2.toArray(new String[list2.size()]);
-		boolean ret1;
-		boolean ret2;
-		switch(LNo){
-		       case 0:
-		          return evaluateMemberStateCondition0(userid,condA,defaultOperation);
-		       case 1:
-			      Pair<Operator, String[]> p = extractStateNumbers(condA);
-		          return evaluateMemberStateCondition0(userid,p.trailer,p.leader);
-		       case 2:
-			      Pair<Operator, String[]> p1 = extractStateNumbers(condA);
-	              ret1 = evaluateMemberStateCondition0(userid,p1.trailer,p1.leader);
-	              Pair<Operator, String[]> p2 = extractStateNumbers(condB);
-	              ret2 = evaluateMemberStateCondition0(userid,p2.trailer,p2.leader);
-		         
-		          return ret1 && ret2;
-		       default :
-		    	   return false; 
-		 }
-	}*/
-
-
-/*public String[] SplitElm(String str0){
-	    String buf[];
-	    String str1,str2,str3;
-	    int P0,P1,P2;
-	    int ic,jc,kc;
-	    buf = new String[20];
-	    ic=0;
-	    P0=str0.indexOf(",");
-	    while (P0 > 0){
-		    P1=str0.indexOf("(");
-	        P2=str0.lastIndexOf(")");
-	        if (P0 < P1||P1<0){
-	            buf[ic]=str0.substring(0,P0);
-	            ic+=1;
-	            str0=str0.substring(P0+1);
-	            P0=str0.indexOf(",");
-	        }else{        
-		            str1=str0.substring(0,P1);
-		            str2=str0.substring(P1+1,P2);
-		            str3=str0.substring(P2+1);
-		            P1=str2.indexOf("(");
-		            P2=str3.indexOf(")");
-		            while(P1 > 0){
-		                str1=str1 + str2.substring(0,P1);
-		                str2=str2.substring(P1+1) + str3.substring(0,P2);
-		                if (str2.length() > P2){
-		                    str3=str3.substring(P2+1);
-		                    P2=str3.indexOf(")");
-		                } else {
-		                    str3=null;
-		                    P2=-1;
-		                }             
-		                P1=str2.indexOf("(");
-		            }
-	            buf[ic]=str1 + "(" + str2 +")";
-	            ic=ic+1;
-	            if (str3==null){
-	                P0 = -1;
-	                str0=null;
-	            } else if (str3.length() <2){
-	                P0 = -1;
-	                str0=null;
-	            } else {
-	                str0=str3.substring(2);
-	                P0=str0.indexOf(",");
-	            }
-	        }
-	    }
-	    buf[ic]=str0;
-	    ic+=1;
-	    buf[ic]=null;
-	    return buf;
-	}
-*/
-public String[] SplitElm(String str0){
+	public String[] SplitElm(String str0){
 	    String buf[];
 	    String str1,str2,str3;
 	    int P0,P1,P2;
 	    int ic,jc,kc;
 	    int flag=0;
-	    buf = new String[20];
+	    buf = new String[60];
 	    ic=0;
 	    P0=str0.indexOf(",");
 	    P1=str0.indexOf("(");
@@ -800,95 +675,95 @@ public String[] SplitElm(String str0){
         }
         buf[ic]=str0;
         return buf;
-        
-}
-public boolean memberEvalEQ(String userid,String state){
-    String buf[];
-    String logic;
-    boolean result,elm;
-    String str0;
-    int ic;
-    result = true;
-    str0=state.trim();  //すべての空白を除く
-    str0=str0.toUpperCase(); //すべて大文字に変換する
-    
-    int P1=str0.indexOf("(");
-    logic=str0.substring(0,P1-1);
-    int P2=str0.lastIndexOf(")");
-    str0=str0.substring(P1+1,P2-1);
-    
-    buf=SplitElm(str0);
-
-    ic=0;
-    switch (logic){
-    case "AND":
-    case "NOR":
-    case "NOT":
-        result=true;
-        break;
-    case "OR":
-    case "NAND":
-        result=false;
-        break;
-    default:
-        System.out.println("Logic Error "+logic);
-    }
-    while (buf[ic]!=null) {
-        if (buf[ic].indexOf("(")>=0){
-            elm=memberEvalEQ(userid,buf[ic]);
-        }else{
-            elm=memberHasState(userid,buf[ic]);
-        }
-        switch (logic){
-        case "AND":
-            result=elm && result;
-            break;
-        case "NOR":
-            result= !(elm) && result;
-            break;
-        case "NOT":
-            result= !(elm) && result;
-            break;
-        case "OR":
-            result= elm || result;
-            break;
-        case "NAND":
-            result= !(elm) || result;
-            break;
-        
-        }
-	ic+=1;
-    }
-    return result;
-}
-protected  boolean evaluateMemberStateCondition(final String userid, final String cond[], final Operator defaultOperation){
-	boolean fl=false;
-	if(cond != null) {
-     	if(cond.length == 1) {
-     		if(cond[0].indexOf("(")>=0) {
-     			fl=true;
-     		}
- 		}
+	        
 	}
-    if (fl) {
-    	return memberEvalEQ (userid, cond[0]) ;	
-    }else {
-		Pair<Operator, String[]> p = extractStateNumbers(cond);
-		if(p.leader == null) p.leader = defaultOperation;
-//		if(p.trailer == null || p.trailer.length == 0) return true;
-		boolean and = p.leader == Operator.AND || p.leader == Operator.NAND;
-		boolean not = p.leader == Operator.NAND || p.leader == Operator.NOR || p.leader == Operator.NOT;
-		boolean result = and ? memberHasAllStates(userid, p.trailer) : memberHasStates(userid, p.trailer);
-		boolean ret =  (not ? !result : result);
-		if(ret){
-			logger.info("ユーザステート条件がヒットしました: " + (and ? " and " : " or ") + (not ? " not " : " ") + Util.toString(p.trailer) + ":" + ret);
+	public boolean memberEvalEQ(String userid,String state){
+	    String buf[];
+	    String logic;
+	    boolean result,elm;
+	    String str0;
+	    int ic;
+	    result = true;
+	    str0=state.trim();  //すべての空白を除く
+	    str0=str0.toUpperCase(); //すべて大文字に変換する
+	    
+	    int P1=str0.indexOf("(");
+	    logic=str0.substring(0,P1-1);
+	    int P2=str0.lastIndexOf(")");
+	    str0=str0.substring(P1+1,P2-1);
+	    
+	    buf=SplitElm(str0);
+	
+	    ic=0;
+	    switch (logic){
+	    case "AND":
+	    case "NOR":
+	    case "NOT":
+	        result=true;
+	        break;
+	    case "OR":
+	    case "NAND":
+	        result=false;
+	        break;
+	    default:
+	        System.out.println("Logic Error "+logic);
+	    }
+	    while (buf[ic]!=null) {
+	        if (buf[ic].indexOf("(")>=0){
+	            elm=memberEvalEQ(userid,buf[ic]);
+	        }else{
+	            elm=memberHasState(userid,buf[ic]);
+	        }
+	        switch (logic){
+	        case "AND":
+	            result=elm && result;
+	            break;
+	        case "NOR":
+	            result= !(elm) && result;
+	            break;
+	        case "NOT":
+	            result= !(elm) && result;
+	            break;
+	        case "OR":
+	            result= elm || result;
+	            break;
+	        case "NAND":
+	            result= !(elm) || result;
+	            break;
+	        
+	        }
+		ic+=1;
+	    }
+	    return result;
+	}
+	/**ステート条件を評価する
+	 * @return 条件にヒットしたかどうか
+	 * */
+	protected  boolean evaluateMemberStateCondition(final String userid, final String cond[], final Operator defaultOperation){
+		boolean fl=false;
+		if(cond != null) {
+	     	if(cond.length == 1) {
+	     		if(cond[0].indexOf("(")>=0) {
+	     			fl=true;
+	     		}
+	 		}
 		}
-	    return ret;
+	    if (fl) {
+	    	return memberEvalEQ (userid, cond[0]) ;	
+	    }else {
+			Pair<Operator, String[]> p = extractStateNumbers(cond);
+			if(p.leader == null) p.leader = defaultOperation;
+			boolean and = p.leader == Operator.AND || p.leader == Operator.NAND;
+			boolean not = p.leader == Operator.NAND || p.leader == Operator.NOR || p.leader == Operator.NOT;
+			boolean result = and ? memberHasAllStates(userid, p.trailer) : memberHasStates(userid, p.trailer);
+			boolean ret =  (not ? !result : result);
+			if(ret){
+				logger.info("ユーザステート条件がヒットしました: " + (and ? " and " : " or ") + (not ? " not " : " ") + Util.toString(p.trailer) + ":" + ret);
+			}
+		    return ret;
+		}
 	}
-}
 
-	
-	
 	/**メンバがいずれかのステートを所有しているか。(OR)*/
 	protected boolean memberHasStates(final String userid, final String[] states){
 		if(states == null)return true;
@@ -915,58 +790,6 @@ protected  boolean evaluateMemberStateCondition(final String userid, final Strin
 		return list.contains(state);
 	}
    
-/*protected  boolean evaluateStateCondition0(final String cond[], final Operator defaultOperation) {
- 
-	 
- 
-	List<String> list1 = new ArrayList<String>();
-	List<String> list2 = new ArrayList<String>();
-	int Fnot = 0;
-	int LNo = 0;
-	if(cond==null) {
-		return true;
-	}
-	for(int i = 0; i <cond.length; i++){
-		if(LNo<1){
-			list1.add(cond[i]);
-			if(cond[i].indexOf("NOR")!=-1||cond[i].indexOf("NAND")!=-1||cond[i].indexOf("NOT")!=-1){
-				Fnot+=1;
-				LNo+=1;
-			}else if(cond[i].indexOf("OR")!=-1||cond[i].indexOf("AND")!=-1){
-				LNo+=1;			
-			}else{
-			}
-			}else {
-			list2.add(cond[i]);
-			if(cond[i].indexOf("NOR")!=-1||cond[i].indexOf("NAND")!=-1||cond[i].indexOf("NOT")!=-1){
-				Fnot+=1;
-				LNo+=1;
-			}else if(cond[i].indexOf("OR")!=-1||cond[i].indexOf("AND")!=-1){
-				LNo+=1;			
-			}
-		}
-	}
-	String[] condA = list1.toArray(new String[list1.size()]);
-	String[] condB = list2.toArray(new String[list2.size()]);
-	boolean ret1;
-	boolean ret2;
-	switch(LNo){
-	       case 0:
-	          return evaluateStateCondition0(condA,defaultOperation);
-	       case 1:
-		      Pair<Operator, String[]> p = extractStateNumbers(condA);
-	          return evaluateStateCondition0(p.trailer,p.leader);
-	       case 2:
-		      Pair<Operator, String[]> p1 = extractStateNumbers(condA);
-              ret1 = evaluateStateCondition0(p1.trailer,p1.leader);
-              Pair<Operator, String[]> p2 = extractStateNumbers(condB);
-              ret2 = evaluateStateCondition0(p2.trailer,p2.leader);
-	         
-	          return ret1 && ret2;
-	       default :
-	    	   return false; 
-	 }
-}*/
 	public boolean EvalEQ(String state){
 	    String buf[];
 	    String logic;
@@ -976,8 +799,6 @@ protected  boolean evaluateMemberStateCondition(final String userid, final Strin
 	    result = true;
 	    buf = null;
 	    str0 = state;
-	    //str0=state.trim();  //すべての空白を除く
-	    //str0=str0.toUpperCase(); //すべて大文字に変換する
 
 	    int P1=str0.indexOf("(");
 	    logic=str0.substring(0,P1);
@@ -1057,8 +878,6 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 			return ret;
 		}
 	  }
-
-
 
 	/**自動アクションのステート条件を評価
 	 * 
@@ -1189,7 +1008,8 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 		NotificationMessage msg = new NotificationMessage(pid, data, to, from, cc, replyTo);
 		return msg;
 	}
-	/**イベントループ*/
+	/**自動アクション、トリガーイベントなどの発生条件をスキャンし必要に応じて起動する
+	 * */
 	class Worker extends TimerTask{
 		protected Timer timer = new Timer();
 		int interval = Integer.parseInt(System.getProperty("check.interval","1000"));
@@ -1247,7 +1067,6 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 		}
 		return ret;
 	}
-
 	
 	protected boolean checkStateCondition(NotificationMessage request, ReplyData rep){
 		return evaluateStateCondition(rep.statecondition, Operator.OR);
@@ -1434,7 +1253,6 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 					msg.action.attachments);//Util.toIntArray(msg.action.attachments));
 			boolean ret = (reps.size() == 0);
 			for(ReplyData d : reps.toArray(new ReplyData[reps.size()])){
-				//TODO:20180222: これでどうだろう...
 				if(ReplyData.Types.NOT_FOUND.equalsIgnoreCase(d.type)){
 					logger.debug(String.format("アクション%s(%s)には後続リプライがありません(notfound)。", msg.action.id, msg.action.name));
 					ret = true;break;//見つからないが候補にあったらもう無理でしょう、たぶん
@@ -1593,7 +1411,7 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 			StateData cur = i.next();
 			Object d = systemState.get(String.valueOf(cur.id));
 			if(d != null){
-				if(d instanceof Date)//なんかへんだな。
+				if(d instanceof Date)
 					cur.when = (Date)d;
 				else if(d instanceof Long)
 					cur.when = new Date(((Long)d).longValue());
@@ -1755,76 +1573,6 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 			shiftRecursive(m.replyTo, diff);
 	}
 
-	
-/*	
-	//<!----  ルールの評価式にjavascriptのスクリプトを記述できるようにするための処理群(実験的)
-	@JsonIgnoreType
-	class ScriptEvaluator{
-		ScriptEngine engine = null;
-		Reader jsout = null;
-		Writer jserr = null;
-		Writer jsin = null;
-		public ScriptEvaluator() {
-			initEngine(true);
-		}
-		protected void engineError(final String msg, final Throwable e){
-			if(this.engine == null)throw new WorkflowException("スクリプトエンジンが初期化されていません。");
-			String message = msg + (e != null ? e.toString() : "");
-			logger.error(message);
-		}
-		protected void engineOut(Object o){
-			if(this.engine == null)throw new WorkflowException("スクリプトエンジンが初期化されていません。");
-		}
-		protected void engineIn(String scr){
-			if(this.engine == null)throw new WorkflowException("スクリプトエンジンが初期化されていません。");
-		}
-		
-		public void initEngine(boolean reload){
-			if(this.engine != null && !reload)	return;
-			logger.info("スクリプトエンジンを初期化中");
-			this.engine = new ScriptEngineManager().getEngineByName("JavaScript");
-			this.jsout = engine.getContext().getReader();
-			this.jsin = engine.getContext().getWriter();
-			this.jserr = engine.getContext().getErrorWriter();
-	
-			String libdir = WorkflowService.context.getRealPath("lib");
-			if(libdir == null || libdir.length() == 0){	
-				logger.info("libディレクトリがありません。初期化スクリプトは実行されません。");
-				return;}
-			String[] scripts = new File(libdir).list(new FilenameFilter() {
-				@Override public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(".js");
-				}});
-			for(String cur : scripts){
-				try{
-					Object result = engine.eval(new FileReader(new File(libdir + File.separator + cur)));
-					logger.info("読み込みました: " + cur + ":" + result);
-					
-				}catch(Throwable t){
-					engineError("初期化スクリプトの実行に失敗しました:" + cur, t);
-				}
-			}
-		}
-		protected String evaluateScript(final String scr){
-			try{
-	
-				engine.eval(scr);
-				Object ret = ((Invocable)engine).invokeFunction("evaluate", this);
-				logger.info("evaluate script: " + (ret != null ? ret.toString() : "null")+ "; "+ scr);
-				
-				return ret != null ? ret.toString() : "null";
-			}catch(NoSuchMethodException | ScriptException e){
-				String msg = "スクリプトの評価に失敗しました。"+e.toString() + ":"+scr;
-				logger.error(msg);
-				return msg;
-			}
-		}
-	}
-	ScriptEvaluator evaluator = null;
-	public ScriptEvaluator getScriptEvaluator() {return this.evaluator;}
-	//----->
-	
-*/	
 	/**ステートカードが追加されたときの処理<br>
 	 * 現在の実装ではポイントカードを評価する
 	 * */
@@ -1854,11 +1602,10 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 				this.pointchest.get(msgid).add(cur);
 				logger.info("ポイントカードを取得:" + this.team + ";" + cur.toString());
 			}
-
 		}
-	//	PhaseData phaseDef = PhaseData.getInstance(this.phase);
-
 	}
+	/**ポイントカード取得時の追加処理。現在の実装ではNOP
+	 * */
 	protected void onGetPointCard(final PointCard point, final ReplyData src){}
 	/**ポイントカード多重度をチェック。パスしたらtrue。*/
 	protected synchronized boolean checkPointcards(final String state, final PointCard pt){
@@ -1895,105 +1642,5 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 		logger.log("ポイント獲得条件をパス:" + this.team + ";" + pt.toString());
 		return true;
 	}
-	
-	public static void main(String[] args){
-		WorkflowInstance inst = WorkflowInstance.newInstance("D:\\workspace2\\commander-poi\\WebContent", "groupA.nitplant.local", 1);
-		StateData.reload("D:\\workspace2\\commander-poi\\WebContent\\data");
-		String[] states = new String[]{"1","2","10","20","100"};
-		for(String i : states){
-			inst.addState(i, new Date(), "msg-" + i);
-		}
 
-		String[][] pat = new String[][]{
-			new String[]{"AND"},
-			new String[]{"OR"},
-			new String[]{"NAND"},
-			new String[]{"NOR"},
-			new String[]{"NOT"},
-			new String[]{""},
-			new String[0],
-			new String[]{"aaaa"},
-			
-			//単項
-			new String[]{"AND", "1"},
-			new String[]{"OR", "1"},
-			new String[]{"NAND","1"},
-			new String[]{"NOR","1"},
-			new String[]{"NOT","1"},
-			new String[]{"1"},
-
-			//単項逆順
-			new String[]{"1","AND"},
-			new String[]{"1","OR"},
-			new String[]{"1","NAND"},
-			new String[]{"1","NOR"},
-			new String[]{"1","NOT"},
-			new String[]{"1"},
-
-			//二項、AND
-			new String[]{"AND", "1","2"},
-			new String[]{"OR", "1","2"},
-			new String[]{"NAND","1","2"},
-			new String[]{"NOR","1","2"},
-			new String[]{"NOT","1","2"},
-			new String[]{"1","2"},
-			
-			//二項、OR
-			new String[]{"AND", "1","22"},
-			new String[]{"OR", "1","22"},
-			new String[]{"NAND","1","22"},
-			new String[]{"NOR","1","22"},
-			new String[]{"NOT","1","22"},
-			new String[]{"1","22"},
-			//三項、AND
-			new String[]{"AND", "20","2", "3"},
-			new String[]{"OR", "20","2", "3"},
-			new String[]{"NAND","20","2", "3"},
-			new String[]{"NOR","20","2", "3"},
-			new String[]{"NOT","20","2", "3"},
-			new String[]{"20","2", "3"},
-			//三項、OR
-			new String[]{"AND", "20","200", "3"},
-			new String[]{"OR", "20","200", "3"},
-			new String[]{"NAND","20","200", "3"},
-			new String[]{"NOR","20","200", "3"},
-			new String[]{"NOT","20","200", "3"},
-			new String[]{"20","200", "3"},
-			//三項、OR
-			new String[]{"AND", "203","201", "3"},
-			new String[]{"OR", "203","201", "3"},
-			new String[]{"NAND","203","201", "3"},
-			new String[]{"NOR","203","201", "3"},
-			new String[]{"NOT","203","201", "3"},
-			new String[]{"203","201", "3"},
-			//三項、ヒットせず
-			new String[]{"AND", "203","201", "30"},
-			new String[]{"OR", "203","201", "30"},
-			new String[]{"NAND","203","201", "30"},
-			new String[]{"NOR","203","201", "30"},
-			new String[]{"NOT","203","201", "30"},
-			new String[]{"203","201", "30"},
-			//三項、OR
-			new String[]{"AND", "203","201", "3"},
-			new String[]{"OR", "203","201", "3"},
-			new String[]{"203","201", "3","NAND"},
-			new String[]{"203","NOR","201", "3"},
-			new String[]{"203","201","NOT", "3"},
-			new String[]{"203","201", "3"},
-			//演算子2つ
-			new String[]{"AND", "203","201", "NAND"},
-			new String[]{"OR", "203","OR", "3"},
-			new String[]{"203","AND", "3","NAND"},
-			new String[]{"NOT","NOR","201", "3"},
-			new String[]{"NOT","201","NOT", "3"},
-		};
-		
-		for(String[] p : pat){
-			try{
-			System.out.println(Util.toString(p)+ ":" + inst.evaluateStateCondition(p, Operator.OR));
-			}catch(Throwable t){
-				System.out.println(Util.toString(p)+ ":" + t.getMessage());	
-			}
-		}
-	}
 }

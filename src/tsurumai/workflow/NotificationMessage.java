@@ -80,8 +80,7 @@ public class NotificationMessage implements Cloneable{
 		this.sentDate = new Date();
 		this.cc = cc;
 		this.team = this.from.team;
-//		Calendar c = new GregorianCalendar();c.add(Calendar.SECOND,action.responseTime);
-//		this.visibleDate = c.getTime();
+
 		this.message = constructMessage(action, replyTo);
 	}
 	protected static ServiceLogger logger = ServiceLogger.getLogger();
