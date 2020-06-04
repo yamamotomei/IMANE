@@ -17,7 +17,7 @@
        "email":"IT課長@SampleCompany.com",
        "team":"SampleCompany.com",
        "desc":"",
-       "recipients":["IT課長","OT課長","CSIRT","OT担当","IT担当"],
+       "recipients":["OT課長","CSIRT","IT担当"],
        "system": [false]
      },
      {
@@ -27,7 +27,7 @@
        "email":"OT課長@SampleCompany.com",
        "team":"SampleCompany.com",
        "desc":"",
-       "recipients":["IT課長","OT課長","CSIRT","OT担当","IT担当"],
+       "recipients":["IT課長","OT担当"],
        "system": [false]
      },
      {

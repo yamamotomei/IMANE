@@ -15,8 +15,8 @@
        "type":"auto",
        "name":"演習終了１",
        "message":"演習終了です。",
-       "systemstatecondition": ["AND(10030008,10040010)"],
-       "delay": 2,
+       "systemstatecondition": ["AND(NOT(10020005),10030009,10040011,10020006)"],
+       "delay": 20,
        "from":"system",
        "to":"all",
        "attachments": ["20010003"],
@@ -36,96 +36,107 @@
     {
        "type":"auto",
        "name":"サイバー攻撃２",
-       "message":"制御機器に深刻なダメージを与える攻撃を実施",
-       "systemstatecondition": ["NOT(10010003)"],
-       "delay": 180,
+       "message":"制御機器に深刻なダメージを与える攻撃を実施。",
+       "systemstatecondition": ["AND(10020006,NAND(10030009,10040011))"],
+       "delay": 0,
        "from":"サイバー攻撃者",
        "to":"system",
        "attachments": ["20020005"],
        "id":"A00005"
     },
     {
+       "type":"auto",
+       "name":"攻撃試行",
+       "message":"サイバー攻撃者がもう一度ネットワークにアクセスを試みました。",
+       "systemstatecondition": ["10020004"],
+       "delay": 180,
+       "from":"サイバー攻撃者",
+       "to":"system",
+       "attachments": ["20020006"],
+       "id":"A00006"
+    },
+    {
        "type":"action",
        "name":"検知した通信データを提出",
        "message":"不審な通信がありました。",
-       "attachments": ["20030006"],
+       "attachments": ["20030007"],
        "roles": ["IT課長"],
-       "statecondition": ["20070020"],
-       "id":"A00006"
+       "statecondition": ["20070021"],
+       "id":"A00007"
     },
     {
        "type":"action",
        "name":"通信遮断のための連絡",
        "message":"サイバー攻撃の可能性から、通信遮断を行うので準備をお願いします。",
-       "attachments": ["20030007"],
+       "attachments": ["20030008"],
        "roles": ["IT課長"],
-       "statecondition": ["20050014"],
-       "id":"A00007"
+       "statecondition": ["20050015"],
+       "id":"A00008"
     },
     {
        "type":"action",
        "name":"遮断指示",
        "message":"通信遮断を実施してください。",
-       "attachments": ["20030008"],
+       "attachments": ["20030009"],
        "roles": ["IT課長"],
-       "statecondition": ["20040012"],
-       "id":"A00008"
+       "statecondition": ["20040013"],
+       "id":"A00009"
     },
     {
        "type":"action",
        "name":"コントローラのリスタート指示",
        "message":"コントローラのリスタートをしてください。",
-       "attachments": ["20040009"],
+       "attachments": ["20040010"],
        "roles": ["OT課長"],
-       "statecondition": ["20060015"],
-       "id":"A00009"
+       "statecondition": ["20060016"],
+       "id":"A00010"
     },
     {
        "type":"action",
        "name":"サイバー攻撃の可能性があるため制御機器を停止",
        "message":"サイバー攻撃の可能性があるため制御機器を停止してください。",
-       "attachments": ["20040010"],
+       "attachments": ["20040011"],
        "roles": ["OT課長"],
-       "statecondition": ["20030007"],
-       "id":"A00010"
+       "statecondition": ["20030008"],
+       "id":"A00011"
     },
     {
        "type":"action",
        "name":"コントローラの調査依頼",
        "message":"コントローラーの調査をお願いします。",
-       "attachments": ["20040011"],
+       "attachments": ["20040012"],
        "roles": ["OT課長"],
-       "statecondition": ["20060015"],
-       "id":"A00011"
+       "statecondition": ["20060016"],
+       "id":"A00012"
     },
     {
        "type":"action",
        "name":"通信遮断準備、完了報告",
        "message":"通信遮断の準備、完了しました。",
-       "attachments": ["20040012"],
+       "attachments": ["20040013"],
        "roles": ["OT課長"],
-       "statecondition": ["20060017"],
-       "id":"A00012"
+       "statecondition": ["20060018"],
+       "id":"A00013"
     },
     {
        "type":"action",
        "name":"通信遮断準備の連絡",
        "message":"サイバー攻撃の可能性から、通信遮断を行うので準備をお願いします。",
-       "attachments": ["20040013"],
+       "attachments": ["20040014"],
        "roles": ["OT課長"],
-       "statecondition": ["20030007"],
-       "id":"A00013"
+       "statecondition": ["20030008"],
+       "id":"A00014"
     },
     {
        "type":"auto",
        "name":"外部通信遮断指示",
        "message":"サイバー攻撃の可能性があるため、外部との通信遮断を行ってください。",
-       "systemstatecondition": ["10030006"],
+       "systemstatecondition": ["10030007"],
        "delay": 3,
        "from":"CSIRT",
        "to":"IT課長",
-       "attachments": ["20050014"],
-       "id":"A00014"
+       "attachments": ["20050015"],
+       "id":"A00015"
     },
     {
        "type":"auto",
@@ -135,25 +146,14 @@
        "delay": 3,
        "from":"OT担当",
        "to":"OT課長",
-       "attachments": ["20060015"],
-       "id":"A00015"
-    },
-    {
-       "type":"auto",
-       "name":"コントローラの故障は確認できず",
-       "message":"コントローラの故障は確認できませんでした。",
-       "systemstatecondition": ["10040011"],
-       "delay": 5,
-       "from":"OT担当",
-       "to":"OT課長",
        "attachments": ["20060016"],
        "id":"A00016"
     },
     {
        "type":"auto",
-       "name":"通信遮断準備、完了報告",
-       "message":"通信遮断の準備、完了しました。",
-       "systemstatecondition": ["10040013"],
+       "name":"コントローラの故障は確認できず",
+       "message":"コントローラの故障は確認できませんでした。",
+       "systemstatecondition": ["10040012"],
        "delay": 5,
        "from":"OT担当",
        "to":"OT課長",
@@ -162,9 +162,9 @@
     },
     {
        "type":"auto",
-       "name":"制御機器の停止完了",
-       "message":"制御機器を停止しました。",
-       "systemstatecondition": ["10040010"],
+       "name":"通信遮断準備、完了報告",
+       "message":"通信遮断の準備、完了しました。",
+       "systemstatecondition": ["10040014"],
        "delay": 5,
        "from":"OT担当",
        "to":"OT課長",
@@ -173,14 +173,25 @@
     },
     {
        "type":"auto",
-       "name":"コントローラのリスタートの完了",
-       "message":"コントローラのリスタートを完了しました。コントローラは正常に動作しています。",
-       "systemstatecondition": ["10040009"],
+       "name":"制御機器の停止完了",
+       "message":"制御機器を停止しました。",
+       "systemstatecondition": ["10040011"],
        "delay": 5,
        "from":"OT担当",
        "to":"OT課長",
        "attachments": ["20060019"],
        "id":"A00019"
+    },
+    {
+       "type":"auto",
+       "name":"コントローラのリスタートの完了",
+       "message":"コントローラのリスタートを完了しました。コントローラは正常に動作しています。",
+       "systemstatecondition": ["10040010"],
+       "delay": 5,
+       "from":"OT担当",
+       "to":"OT課長",
+       "attachments": ["20060020"],
+       "id":"A00020"
     },
     {
        "type":"auto",
@@ -190,19 +201,19 @@
        "delay": 3,
        "from":"IT担当",
        "to":"IT課長",
-       "attachments": ["20070020"],
-       "id":"A00020"
+       "attachments": ["20070021"],
+       "id":"A00021"
     },
     {
        "type":"auto",
        "name":"遮断完了",
        "message":"通信遮断、完了しました。",
-       "systemstatecondition": ["10030008"],
+       "systemstatecondition": ["10030009"],
        "delay": 5,
        "from":"IT担当",
        "to":"IT課長",
-       "attachments": ["20070021"],
-       "id":"A00021"
+       "attachments": ["20070022"],
+       "id":"A00022"
     },
     {
        "name":"通知",

@@ -8,7 +8,6 @@
        "name": "演習開始",
        "message": "演習を開始します。",
        "addstate": ["10010001"],
-       "delay": 0,
        "from":"system",
        "to":"all",
        "state":"20010001",
@@ -48,8 +47,8 @@
      },
      {
        "type":"hidden",
-       "addstate": ["10030006"],
-       "to":"CSIRT",
+       "addstate": ["10020006"],
+       "to":"system",
        "name":"",
        "message":"",
        "actionid":"A00006"
@@ -57,7 +56,7 @@
      {
        "type":"hidden",
        "addstate": ["10030007"],
-       "to":"OT課長",
+       "to":"CSIRT",
        "name":"",
        "message":"",
        "actionid":"A00007"
@@ -65,15 +64,15 @@
      {
        "type":"hidden",
        "addstate": ["10030008"],
-       "to":"IT担当",
+       "to":"OT課長",
        "name":"",
        "message":"",
        "actionid":"A00008"
      },
      {
        "type":"hidden",
-       "addstate": ["10040009"],
-       "to":"OT担当",
+       "addstate": ["10030009"],
+       "to":"IT担当",
        "name":"",
        "message":"",
        "actionid":"A00009"
@@ -97,7 +96,7 @@
      {
        "type":"hidden",
        "addstate": ["10040012"],
-       "to":"IT課長",
+       "to":"OT担当",
        "name":"",
        "message":"",
        "actionid":"A00012"
@@ -105,23 +104,23 @@
      {
        "type":"hidden",
        "addstate": ["10040013"],
-       "to":"OT担当",
+       "to":"IT課長",
        "name":"",
        "message":"",
        "actionid":"A00013"
      },
      {
        "type":"hidden",
-       "addstate": ["10050014"],
-       "to":"IT課長",
+       "addstate": ["10040014"],
+       "to":"OT担当",
        "name":"",
        "message":"",
        "actionid":"A00014"
      },
      {
        "type":"hidden",
-       "addstate": ["10060015"],
-       "to":"OT課長",
+       "addstate": ["10050015"],
+       "to":"IT課長",
        "name":"",
        "message":"",
        "actionid":"A00015"
@@ -160,8 +159,8 @@
      },
      {
        "type":"hidden",
-       "addstate": ["10070020"],
-       "to":"IT課長",
+       "addstate": ["10060020"],
+       "to":"OT課長",
        "name":"",
        "message":"",
        "actionid":"A00020"
@@ -173,6 +172,14 @@
        "name":"",
        "message":"",
        "actionid":"A00021"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10070022"],
+       "to":"IT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00022"
      },
      {
        "actionid":"i0001",
