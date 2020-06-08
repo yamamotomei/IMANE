@@ -13,7 +13,8 @@
 
 参加者は現実の役職としてゲームに参加でき、組織間連携をゲーム内で擬似体験できる
 
-図
+![IMANE-PCの概要](https://user-images.githubusercontent.com/55830516/83992655-01dd0900-a98c-11ea-94f1-4cb8af3ee356.png)
+
 # Getting Started / スタートガイド
 前提条件
 サーバ
