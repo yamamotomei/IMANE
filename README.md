@@ -13,23 +13,23 @@
 前提条件
 - サーバ
   - jdk　verx 動作を確認
- - Tomcat verx　動作を確認
+  - Tomcat verx　動作を確認
 - クライアント
--- Google Chrome
+  - Google Chrome
  
 - JDKのインストール
--- OpenJDKをインストール
---- https://openjdk.java.net/
+  - OpenJDKをインストール
+  - https://openjdk.java.net/
 
 - Tomcatのインストールとworkshop.jarの配備
--- Apache Tomcat
---- http://tomcat.apache.org/
---- apache-tomcat-x.x.xx\webapps内にworkshop.jarを配備する
+  - Apache Tomcat
+  - http://tomcat.apache.org/
+  - apache-tomcat-x.x.xx\webapps内にworkshop.jarを配備する
 
-サーバーの起動
-1.Tomcatを起動
-2.コンソール画面へのアクセス
--http://[ホスト名]:8080/workshop/
+- サーバーの起動
+  1. Tomcatを起動
+  2. コンソール画面へのアクセス
+    -http://[ホスト名]:8080/workshop/
 
 演習開始
 「管理者/オブザーバはこちらから」をクリック
