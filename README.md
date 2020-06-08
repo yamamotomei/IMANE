@@ -12,7 +12,7 @@
 # Getting Started / スタートガイド
 前提条件
 - サーバ
- - jdk　verx 動作を確認
+  - jdk　verx 動作を確認
  - Tomcat verx　動作を確認
 - クライアント
 -- Google Chrome
