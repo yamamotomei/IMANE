@@ -19,11 +19,11 @@
  
 - JDKのインストール
   - OpenJDKをインストール
-   - https://openjdk.java.net/
+    - https://openjdk.java.net/
 
 - Tomcatのインストールとworkshop.jarの配備
   - Apache Tomcat
-   - http://tomcat.apache.org/
+    - http://tomcat.apache.org/
   - apache-tomcat-x.x.xx\webapps内にworkshop.jarを配備する
 
 - サーバーの起動
