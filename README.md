@@ -11,20 +11,20 @@
 
 # Getting Started / スタートガイド
 前提条件
-サーバ
-- jdk　verx 動作を確認
-- Tomcat verx　動作を確認
-クライアント
-- Google Chrome
+-サーバ
+-- jdk　verx 動作を確認
+-- Tomcat verx　動作を確認
+-クライアント
+-- Google Chrome
  
-JDKのインストール
-- OpenJDKをインストール
--- https://openjdk.java.net/
+- JDKのインストール
+-- OpenJDKをインストール
+--- https://openjdk.java.net/
 
-Tomcatのインストールとworkshop.jarの配備
-- Apache Tomcat
--- http://tomcat.apache.org/
--- apache-tomcat-x.x.xx\webapps内にworkshop.jarを配備する
+-Tomcatのインストールとworkshop.jarの配備
+-- Apache Tomcat
+--- http://tomcat.apache.org/
+--- apache-tomcat-x.x.xx\webapps内にworkshop.jarを配備する
 
 サーバーの起動
 1.Tomcatを起動
