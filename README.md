@@ -14,7 +14,7 @@
 ![IMANE-PCの概要](https://user-images.githubusercontent.com/55830516/83992655-01dd0900-a98c-11ea-94f1-4cb8af3ee356.png)
 
 # Getting Started / スタートガイド
-前提条件
+### 前提条件
 - サーバ
   - jdk　verx 動作を確認
   - Tomcat verx　動作を確認
@@ -37,8 +37,11 @@
 
 - 演習開始
   - 「管理者/オブザーバはこちらから」をクリック
+  - ログインをクリック
+  - 開始ボタンをクリック
 
 - サーバーのシャットダウン
+  - Tomcatをシャットダウン
 
 - インストール、実行の手順についてはIMANE-PCサーバー環境構築と演習開始方法のPDFを参照してください。
   - [IMANE-PCサーバー環境構築と演習開始方法](https://workshop)
