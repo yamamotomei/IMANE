@@ -33,7 +33,7 @@
 - サーバーの起動
   1. Tomcatを起動
   2. コンソール画面へのアクセス
-     -http://[ホスト名]:8080/workshop/
+     -　http://[ホスト名]:8080/workshop/
 
 - 演習開始
   - 「管理者/オブザーバはこちらから」をクリック
@@ -44,7 +44,7 @@
   - Tomcatをシャットダウン
 
 - インストール、実行の手順についてはIMANE-PCサーバー環境構築と演習開始方法のPDFを参照してください。
-  - [IMANE-PCサーバー環境構築と演習開始方法](https://workshop)
+  - [IMANE-PCサーバー環境構築と演習開始方法](https://docs.google.com/presentation/d/1ekoa2WFWvBIGvYUBVM2yrIjZMWI0hMXu/edit#slide=id.p10https://workshop)
 
 - 操作の流れについてはついてはIMANE-PCの操作説明のPDFを参照してください
   - [IMANE-PCの操作説明](https://workshop)
