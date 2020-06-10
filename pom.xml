@@ -1,10 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <build>
+  
+	<finalName>workshop</finalName>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
@@ -134,6 +136,10 @@
       <url>https://repo.eclipse.org/content/groups/releases/</url>
     </repository>
   </repositories>
-  <groupId>FrICORE</groupId>
-  <artifactId>FrICORE</artifactId>
+  <groupId>IMANE-PC</groupId>
+  <artifactId>IMANE-PC</artifactId>
+  <organization>
+  	<name>TsurumaiGO team</name>
+  </organization>
+  <name>TsurumaiGO</name>
 </project>

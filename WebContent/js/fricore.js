@@ -1574,34 +1574,29 @@ function SplitElm(str0){
 	    var buf=[];
 	    var str1,str2,str3;
 	    var P0,P1,P2;
-	    var ic,jc,kc;
 	    var flag=0;
-	    buf = Array(60);
-	    var ic=0;
 	    P0=str0.indexOf(",");
 	    P1=str0.indexOf("(");
      P2=str0.lastIndexOf(")");
      while(P0>0) {
      	if(P0<P1) {
-     		buf[ic] = str0.substr(0,P0);
+     		buf.push(str0.substr(0,P0));
      		str0 = str0.substr(P0+1);
-     		ic+=1;
      		flag = 0;
      		P0=str0.indexOf(",");
      		P1=str0.indexOf("(");
      	}else {
      		str1=null;
      		if(P1>=0) {
-     		           str1 = str0.substr(0,P1+1);
-     		           str0 = str0.substr(P1+1);
+	           str1 = str0.substr(0,P1+1);
+	           str0 = str0.substr(P1+1);
      		}
      		P0 = str0.indexOf(",");
      		P1 = str0.indexOf("(");
      		P2 = str0.indexOf(")");
      		if (P1<0&&P2<0) {
-     			buf[ic] = str0.substr(0,P0);
+     			buf.push(str0.substr(0,P0));
      			str0 = str0.substr(P0+1);
-     			ic++;
      			P0 = str0.indexOf(",");
      		}
      		else if(P1<P2) {
@@ -1620,7 +1615,7 @@ function SplitElm(str0){
      					str3 = str3.substr(P2+1);
      				}else {
      					flag = 0;
-     					buf[ic] = str1+str2;
+     					buf.push(str1+str2);
      					P0 = str3.indexOf(",");
      					if(P0 == 0) {
      						str0 = str3.substr(P0+1);
@@ -1629,26 +1624,24 @@ function SplitElm(str0){
      						str0 = null;
      						P0 =-1;
      					}
-     					ic++;
      				}
      			}
      		}else {
-     			buf[ic] = str1+str0.substr(0,P2+1);
+     			buf.push(str1+str0.substr(0,P2+1));
      			str3 = str0.substr(P2+1);
      			P0 = str3.indexOf(",");
-					if(P0 == 0) {
-						str0 = str3.substr(P0+1);
-						P0 = str0.indexOf(",");
-					}else {
-						str0 = null;
-						P0 =-1;
-					}
-					ic++;
+				if(P0 == 0) {
+					str0 = str3.substr(P0+1);
+					P0 = str0.indexOf(",");
+				}else {
+					str0 = null;
+					P0 =-1;
+				}
      		}
      	}
      	
      }
-     buf[ic]=str0;
+     buf.push(str0);
      return buf;
      
 }
@@ -1681,7 +1674,7 @@ function EvalEQ(memberStates, state){
 		    ret=false;
 		    break;
 		default:
-		    System.out.println("Logic Error "+logic);
+		    console.log("Logic Error "+logic);
 		}
 		while (buf[ic]!=null) {
 		    if (buf[ic].indexOf("(")>=0){

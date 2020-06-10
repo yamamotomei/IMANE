@@ -596,40 +596,33 @@ public class WorkflowInstance {
 	}
  
 	public String[] SplitElm(String str0){
-	    String buf[];
 	    String str1,str2,str3;
-	    int P0,P1,P2;
-	    int ic,jc,kc;
 	    int flag=0;
-	    buf = new String[60];
-	    ic=0;
-	    P0=str0.indexOf(",");
-	    P1=str0.indexOf("(");
-        P2=str0.lastIndexOf(")");
+	    List<String> buf = new ArrayList<String>();
+	    int P0 = str0.indexOf(",");
+	    int P1 = str0.indexOf("(");
+        int P2 = str0.lastIndexOf(")");
         while(P0>0) {
         	if(P0<P1) {
-        		buf[ic] = str0.substring(0,P0);
+        		buf.add(str0.substring(0,P0));
         		str0 = str0.substring(P0+1);
-        		ic+=1;
         		flag = 0;
         		P0=str0.indexOf(",");
         		P1=str0.indexOf("(");
         	}else {
         		str1=null;
         		if(P1>=0) {
-        		           str1 = str0.substring(0,P1+1);
-        		           str0 = str0.substring(P1+1);
+    		           str1 = str0.substring(0,P1+1);
+    		           str0 = str0.substring(P1+1);
         		}
         		P0 = str0.indexOf(",");
         		P1 = str0.indexOf("(");
         		P2 = str0.indexOf(")");
         		if (P1<0&&P2<0) {
-        			buf[ic] = str0.substring(0,P0);
+        			buf.add(str0.substring(0,P0));
         			str0 = str0.substring(P0+1);
-        			ic++;
         			P0 = str0.indexOf(",");
-        		}
-        		else if(P1<P2) {
+        		}else if(P1<P2) {
         			str1 = str1+str0.substring(0,P1+1);
         			str2 = str0.substring(P1+1,P2+1);
         			str3 = str0.substring(P2+1);
@@ -645,7 +638,7 @@ public class WorkflowInstance {
         					str3 = str3.substring(P2+1);
         				}else {
         					flag = 0;
-        					buf[ic] = str1+str2;
+        					buf.add(str1+str2);
         					P0 = str3.indexOf(",");
         					if(P0 == 0) {
         						str0 = str3.substring(P0+1);
@@ -654,11 +647,10 @@ public class WorkflowInstance {
         						str0 = null;
         						P0 =-1;
         					}
-        					ic++;
         				}
         			}
         		}else {
-        			buf[ic] = str1+str0.substring(0,P2+1);
+        			buf.add(str1+str0.substring(0,P2+1));
         			str3 = str0.substring(P2+1);
         			P0 = str3.indexOf(",");
 					if(P0 == 0) {
@@ -668,14 +660,11 @@ public class WorkflowInstance {
 						str0 = null;
 						P0 =-1;
 					}
-					ic++;
         		}
         	}
-        	
-        }
-        buf[ic]=str0;
-        return buf;
-	        
+         }
+        buf.add(str0);
+        return buf.toArray(new String[buf.size()]);
 	}
 	public boolean memberEvalEQ(String userid,String state){
 	    String buf[];
@@ -791,23 +780,17 @@ public class WorkflowInstance {
 	}
    
 	public boolean EvalEQ(String state){
-	    String buf[];
-	    String logic;
-	    boolean result,elm;
-	    String str0;
-	    int ic;
-	    result = true;
-	    buf = null;
-	    str0 = state;
-
+	    boolean result = true;
+	    boolean elm = false;
+	    String str0 = state;
 	    int P1=str0.indexOf("(");
-	    logic=str0.substring(0,P1);
+	    String logic=str0.substring(0,P1);
 	    int P2=str0.lastIndexOf(")");
 	    str0=str0.substring(P1+1,P2);
 	    
-	    buf=SplitElm(str0);
+	    String[] buf=SplitElm(str0);
 
-	    ic=0;
+	    int ic=0;
 	    switch (logic){
 	    case "AND":
 	    case "NOR":
