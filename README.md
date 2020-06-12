@@ -44,13 +44,13 @@
   - Tomcatをシャットダウン
 
 - インストール、実行の手順についてはIMANE-PCサーバー環境構築と演習開始方法のPDFを参照してください。
-  - [IMANE-PCサーバー環境構築と演習開始方法](https://docs.google.com/presentation/d/1ekoa2WFWvBIGvYUBVM2yrIjZMWI0hMXu/edit#slide=id.p10https://workshop)
+  - [IMANE-PCサーバー環境構築と演習開始方法](https://docs.google.com/presentation/d/1g_2clxpkU8UtCgrSM63hIYKnH7hDyE-j/edit#slide=id.p1)
 
 - 操作の流れについてはついてはIMANE-PCの操作説明のPDFを参照してください
-  - [IMANE-PCの操作説明](https://workshop)
+  - [IMANE-PCの操作説明](https://docs.google.com/presentation/d/15RagpR3CiR4OovfVpS0Em4zP3Lv9voe4/edit#slide=id.p1)
 
 - 同梱されてる演習シナリオについてはシナリオ概要のPDFを参照してください
-  - [シナリオ概要](https://workshop)
+  - [シナリオ概要](https://docs.google.com/presentation/d/1cMO9Nqt-RyStZ5-CS1KRWjsVoH2MdvkT/edit#slide=id.p1)
 
 # Release Note/リリース情報
 2020年5月　ver.1.0 新規
