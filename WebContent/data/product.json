@@ -1,6 +1,6 @@
-{"SERVER_VERSION":"v0.1; build 20190326",
+{"SERVER_VERSION":"v1.0; build 20201120",
 "SERVER_DESC":"IMANE_PC server",
-"CLIENT_VERSION":"a",
-"CLIENT_DESC":"b",
-"COPYRIGHT":"Copyright 2018-2019 NIT ",
-"CAPTION":"Industrial Cyber Incident Response Exercise"}
+"CLIENT_VERSION":"v1.0; build 20201120",
+"CLIENT_DESC":"IMANE_PC client",
+"COPYRIGHT":"Copyright 2019-2020 Nagoya Institute of Technology",
+"CAPTION":"Incident MANagement Exercise"}

@@ -105,7 +105,7 @@ public class WorkflowService extends Application implements ServletContextListen
 	public void contextInitialized(ServletContextEvent sce) {
 		logger.info("contextInitialized called.");
 
-		ServletContextListener.super.contextInitialized(sce);
+		//ServletContextListener.super.contextInitialized(sce);
 
 		context = sce.getServletContext();//ctx;
 		Notifier.setContext(context);
@@ -520,13 +520,13 @@ public class WorkflowService extends Application implements ServletContextListen
 				workflow.add(wf);
 			}
 			
-			if(!wf.isRunning()){
+//			if(!wf.isRunning()){
 				wf.start(Integer.parseInt(phase));
-				//postTeamNotification(id, team, "演習ワークフローを開始しました。フェーズ:" + (phase !=null ? phase : ""), NotificationMessage.LEVEL_NORMAL);
-			}else{
-				logger.warn("workflow is already started. team=" + team, null);
-				throw new WorkflowException("フェーズの実行中はフェーズを開始できません。実行中のフェーズを中止してください。", HttpServletResponse.SC_BAD_REQUEST);
-			}
+				postTeamNotification(id, team, "演習ワークフローを開始しました。フェーズ:" + (phase !=null ? phase : ""), NotificationMessage.LEVEL_NORMAL);
+//			}else{
+//				logger.warn("workflow is already started. team=" + team, null);
+//				throw new WorkflowException("フェーズの実行中はフェーズを開始できません。実行中のフェーズを中止してください。", HttpServletResponse.SC_BAD_REQUEST);
+//			}
 			return proc;
 		}finally{exit();}
 	}

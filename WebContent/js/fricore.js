@@ -1244,14 +1244,18 @@ function showProductInfo(){
 		window.versioninfo.SERVER_DESC=resp.SERVER_DESC || "";
 		window.versioninfo.COPYRIGHT=resp.COPYRIGHT || "";
 		window.versioninfo.CAPTION=resp.CAPTION || "";
+		window.versioninfo.CLIENT_DESC=resp.CLIENT_DESC || "";
+		window.versioninfo.CLIENT_VERSION=resp.CLIENT_VERSION || "";
+		
 		$('#server-version').text(window.versioninfo.SERVER_VERSION);
 		$('#server-desc').text(window.versioninfo.SERVER_DESC);
 		$('#copyright').text(window.versioninfo.COPYRIGHT);
+		
+		$('#client-desc').text(window.versioninfo.CLIENT_DESC);
+		$('#client-version').text(window.versioninfo.CLIENT_VERSION);
+    	$(document).attr('title', window.versioninfo.CAPTION);
 
 	});
-	$('#client-desc').text(window.versioninfo.CLIENT_DESC);
-	$('#client-version').text(window.versioninfo.CLIENT_VERSION);
-	$(document).attr('title', window.versioninfo.CAPTION);
 }
 
 var Timer =function(interval){
@@ -2652,6 +2656,10 @@ function assignProcess(id, team, phase, abort, select){
 				getProcess({},false);
 				selectProcess(team);
 			}
+			
+			//TODO:refresh 
+			updateWF();
+			
 			console.log(abort ? "process aborted." : "process assigned.");	
 		})
 		.fail(function(xhr){
@@ -2871,7 +2879,10 @@ function onLoadEvent(data, showHidden){
     }
 	if(data.reply){
 		var exists = $('#event-list tr[data-eventid=' + data.reply.id + ']');
-		if(exists && exists.length>0)	return;//重複
+		if(exists && exists.length>0){
+			console.log("重複メッセージを破棄:" + data.message);
+			return;//重複
+		}
 	}
 	if(data.action && data.action.type == "alert"){
 		warn("システムからの警告:" + data.message);
@@ -2953,12 +2964,26 @@ function onLoadEvent(data, showHidden){
 		console.log("WARN: リプライにステートカードが入っている");
 	}
 	//warn(formatDate(new Date()) + ": 新着イベントがあります。");
-//	tbl.append($(tr).attr('data-carddata', JSON.stringify(data)));
 
+	//2020.11.20 重複メッセージの処理
 	tbl.append($(tr));//.attr('data-carddata', JSON.stringify(data)));
-//	ftbl.append($(tr).clone().attr('data-carddata', JSON.stringify(data)));
-	
-	ftbl.append($(tr).clone());//.attr('data-carddata', JSON.stringify(data)));
+	if(data.id){
+		var exists = $('#event-list tr[data-eventid=' + data.id + ']');
+		if(exists && exists.length>0){
+			console.log("重複メッセージを破棄:" + data.message);return;//重複
+		}else{
+			tbl.append($(tr).clone());
+		}
+    }
+	//2020.11.20 重複メッセージの処理
+	if(data.id){
+		var exists = $('#wfhistory tr[data-eventid=' + data.id + ']');
+		if(exists && exists.length>0){
+			console.log("重複メッセージを破棄(ファシリテータ画面):" + data.message);return;//重複
+		}else{
+			ftbl.append($(tr).clone());
+		}
+    }
 
 	$('#event-list .searchbox').quicksearch('#event-list table tbody tr');
 	$('#event-list').find('.tablesorter').trigger('update');
@@ -2987,10 +3012,24 @@ function onLoadEvent2(data, showHidden){
     if(!hairetsu){
     	hairetsu=[];
     }
-	if(data.reply){
+
+    if(data.reply){
 		var exists = $('#event-list tr[data-eventid=' + data.reply.id + ']');
-		if(exists && exists.length>0)	return;//重複
+		if(exists && exists.length>0){
+			console.log("重複リプライメッセージを破棄:"+data.message);
+			return;//重複
+		}
 	}
+    //TODO
+    if(data.id){
+		var exists = $('#event-list tr[data-eventid=' + data.id + ']');
+		if(exists && exists.length>0){
+			console.log("重複メッセージを破棄:"+data.message);
+			return;
+		}
+		//重複
+	}
+    //
 	if(data.action && data.action.type == "alert"){
 		warn("システムからの警告:" + data.message);
 		return;
@@ -3664,9 +3703,18 @@ function processWFHistory(resp, renderDiagram){
 		if(data.reply && (data.reply.type=="hidden" || data.reply.type=="null"))
 			return;//空応答
 
+		if(data.id){
+			var exists = $('#wfhistory tr[data-eventid=' + data.id + ']');
+			if(exists && exists.length>0){	return;//重複
+				console.log("重複メッセージを破棄：" + data.message);
+			}
+		}
+		
 		if(data.reply){
 			var exists = $('#wfhistory tr[data-eventid=' + data.reply.id + ']');
-			if(exists && exists.length>0)	return;//重複
+			if(exists && exists.length>0){	return;//重複
+				console.log("重複メッセージ(リプライ)を破棄：" + data.message);
+			}
 		}
 		
 		var tbl = $('#wfhistory').find('tbody');

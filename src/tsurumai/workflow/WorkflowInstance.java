@@ -23,6 +23,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.el.util.ConcurrentCache;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -293,12 +295,14 @@ public class WorkflowInstance {
 			}
 		}catch(Throwable t){
 			throw new RuntimeException("failed to load operation state.", t);
-		}
+		}	
 	}
 
 	/**フェーズを開始*/
 	public void start(int phase){
 		logger.info("start:" +this.toString());
+
+		this.clearAutoActionTimers();
 		this.state = State.STARTED;
 		this.phase = phase;
 		this.score = 0;
@@ -312,9 +316,13 @@ public class WorkflowInstance {
 		this.autoActionHistory.clear();
 		this.pointcards = PointCard.list(this.phase);
 		this.initMemberStatus();
+		
 		if(this.worker != null){
 			this.worker.stop();
 		}
+		try {
+			Thread.sleep(1000);
+		}catch(Throwable t) {}
 		
 		this.worker = new Worker();
 		this.worker.start();
@@ -545,9 +553,18 @@ public class WorkflowInstance {
 				}
 			}
 		};
-		new Timer().schedule(handler, cur.delay*1000);
+		Timer tm = new Timer();tm.schedule(handler, cur.delay*1000);
 		
+		this.autoActionTimers.add(tm);
 	}
+	protected void clearAutoActionTimers() {
+		for (Timer t: this.autoActionTimers) {
+			t.cancel();
+		}
+		this.autoActionTimers.clear();
+	}
+	
+	ArrayList<Timer> autoActionTimers = new ArrayList<Timer>();
 	/**ステート条件の演算子*/
 	public static enum Operator{
 		AND,
@@ -804,7 +821,7 @@ public class WorkflowInstance {
 	    default:
 	        System.out.println("Logic Error "+logic);
 	    }
-	    while (buf[ic]!=null) {
+	    while (ic < buf.length && buf[ic]!=null) {//2020/10/7 仮対処:　bufにnull要素がない場合にArrayIndexOutOfBoundsException
 	        if (buf[ic].indexOf("(")>=0){
 	            elm=EvalEQ(buf[ic]);
 	        }else{
@@ -1024,7 +1041,7 @@ protected boolean evaluateStateCondition(final String cond[], final Operator def
 				dispatchAction();
 			}catch(WorkflowException t){
 				logger.error("failed to dispatch action.", t);
-			}catch(Throwable t){//TODO:ConcurrentModificationExceptionが起きるかも...でもスレッドが死んじゃうのはマズイ
+			}catch(Throwable t){
 				logger.error("failed to dispatch action.", t);
 			}
 		}
