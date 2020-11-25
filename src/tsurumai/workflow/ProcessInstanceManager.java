@@ -13,6 +13,12 @@ import tsurumai.workflow.model.Member;
 
 public class ProcessInstanceManager {
 	public class Session{
+		
+		@Override
+		public String toString() {
+			return "user:" + userName;
+			
+		}
 		public Session() {}
 		public Session(final String username, final String password, boolean asAdmin)  throws WorkflowException{
 			login(username, password, asAdmin);
@@ -61,8 +67,9 @@ public class ProcessInstanceManager {
 		return ++getSession().me.pidbase;
 	}
 	Collection<ProcessInstance> instances = new ArrayList<>();
-	public void login(String sv, String userid, String passwd, boolean asAdmin) throws LoginException {
-		this.session = new Session(userid, passwd, asAdmin);
+	public Session login(String sv, String userid, String passwd, boolean asAdmin) throws LoginException {
+		//this.session = new Session(userid, passwd, asAdmin);
+		return new Session(userid, passwd, asAdmin);
 	}
 	public ProcessInstance[] listProcesses() {
 		return instances.toArray(new ProcessInstance[this.instances.size()]);

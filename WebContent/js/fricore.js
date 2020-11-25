@@ -2812,7 +2812,10 @@ function connect(){
 function processSocketEvent(ev){
 	if(ev.type === "message"){
 		if(!ev.data)	return;
+
 		var data = JSON.parse(ev.data);
+		console.log("socket event received." + data.message);
+
 		if(data.presence){
 			renderPresence(data.presence);
 		}else if(data.action){
@@ -2825,7 +2828,6 @@ function processSocketEvent(ev){
 		error("サーバとの接続が解除されました。");
 		updateLoginInfo();
 	}
-	console.log("socket event received." + ev.type);
 	
 }
 var MAX_MESSAGE_LEN = 80;//イベントリストに表示するメッセージの最大長
@@ -2880,7 +2882,7 @@ function onLoadEvent(data, showHidden){
 	if(data.reply){
 		var exists = $('#event-list tr[data-eventid=' + data.reply.id + ']');
 		if(exists && exists.length>0){
-			console.log("重複メッセージを破棄:" + data.message);
+			console.log("重複メッセージを破棄(0):" + data.message);
 			return;//重複
 		}
 	}
@@ -2966,7 +2968,7 @@ function onLoadEvent(data, showHidden){
 	//warn(formatDate(new Date()) + ": 新着イベントがあります。");
 
 	//2020.11.20 重複メッセージの処理
-	tbl.append($(tr));//.attr('data-carddata', JSON.stringify(data)));
+	//tbl.append($(tr));//.attr('data-carddata', JSON.stringify(data)));
 	if(data.id){
 		var exists = $('#event-list tr[data-eventid=' + data.id + ']');
 		if(exists && exists.length>0){
@@ -2974,6 +2976,8 @@ function onLoadEvent(data, showHidden){
 		}else{
 			tbl.append($(tr).clone());
 		}
+    }else{
+    	console.log("重複メッセージを破棄(網張り)" + data.message);return;//重複
     }
 	//2020.11.20 重複メッセージの処理
 	if(data.id){
@@ -2983,6 +2987,8 @@ function onLoadEvent(data, showHidden){
 		}else{
 			ftbl.append($(tr).clone());
 		}
+    }else{
+    
     }
 
 	$('#event-list .searchbox').quicksearch('#event-list table tbody tr');
@@ -2996,6 +3002,9 @@ function onLoadEvent(data, showHidden){
 	}
 }
 
+
+
+/*
 //showWFHistoryとほぼ共通
 //一覧更新用
 function onLoadEvent2(data, showHidden){
@@ -3122,7 +3131,7 @@ function onLoadEvent2(data, showHidden){
 		});
 	}
 }
-
+*/
 /**ステートカードの演出効果を再生*/
 function playEffect(state){
 	var scr = state.effect;

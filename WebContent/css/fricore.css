@@ -260,7 +260,7 @@ ul{
 	font-weight:bold;
 	background-color: #e0d8e0 !important;
 	max-height:none;
-	white-space:
+	
 }
 .selected>td>.list-card{
 	white-space:initial;
@@ -354,7 +354,7 @@ vertical-align:middle;
 }
 
 .replyTo{
-	font-size:small;
+	/*font-size:small;*/
 	color:darkgray;
 	margin-left:1em;
 }

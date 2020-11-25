@@ -23,8 +23,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.el.util.ConcurrentCache;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -316,14 +314,13 @@ public class WorkflowInstance {
 		this.autoActionHistory.clear();
 		this.pointcards = PointCard.list(this.phase);
 		this.initMemberStatus();
-		
 		if(this.worker != null){
 			this.worker.stop();
 		}
-		try {
-			Thread.sleep(1000);
-		}catch(Throwable t) {}
-		
+//		try {
+//			Thread.sleep(1000);
+//		}catch(Throwable t) {}
+//		
 		this.worker = new Worker();
 		this.worker.start();
 		logger.info("workflow started:" +this.toString());

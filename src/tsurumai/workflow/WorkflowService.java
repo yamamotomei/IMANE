@@ -79,9 +79,15 @@ public class WorkflowService extends Application implements ServletContextListen
 	
 	protected static String resourceBase = System.getProperty("workflow.resource", "$CONTEXT/resource");
 	/**map<sessionkey, ProcessInstanceManager>*/
-	protected static Map<String, ProcessInstanceManager> sessionCache = Collections
-			.synchronizedMap(new HashMap<String, ProcessInstanceManager>());
+//	protected static Map<String, ProcessInstanceManager> sessionCache = Collections
+//			.synchronizedMap(new HashMap<String, ProcessInstanceManager>());
+//	String server = System.getProperty("workflow.server", "localhost");
+	
+	protected static Map<String, ProcessInstanceManager.Session> sessionCache = Collections
+			.synchronizedMap(new HashMap<String, ProcessInstanceManager.Session>());
 	String server = System.getProperty("workflow.server", "localhost");
+	
+	
 	/**URL相対パスをローカルパスに変換する
 	 * @param relative 相対URL
 	 * */
@@ -105,7 +111,7 @@ public class WorkflowService extends Application implements ServletContextListen
 	public void contextInitialized(ServletContextEvent sce) {
 		logger.info("contextInitialized called.");
 
-		//ServletContextListener.super.contextInitialized(sce);
+		ServletContextListener.super.contextInitialized(sce);
 
 		context = sce.getServletContext();//ctx;
 		Notifier.setContext(context);
@@ -249,10 +255,12 @@ public class WorkflowService extends Application implements ServletContextListen
 	/**ユーザIDに対応するセションデータを取得する*/
 	public static SessionData getSessionByUserId(final String userId){
 		try{
-
-			for(ProcessInstanceManager m : sessionCache.values()){
-				if(m.session.getUserName().equalsIgnoreCase(userId))
-				return new SessionData(m.session, null, null, null);//context.getRealPath("data"));
+			//TODO:修正中
+			//for(ProcessInstanceManager m : sessionCache.values()){
+			//if(m.session.getUserName().equalsIgnoreCase(userId))
+			for(ProcessInstanceManager.Session session : sessionCache.values()){
+				if(session.getUserName().equalsIgnoreCase(userId))
+					return new SessionData(session, null, null, null);//context.getRealPath("data"));
 			}
 			return null;
 		}catch(Throwable t){
@@ -273,18 +281,31 @@ public class WorkflowService extends Application implements ServletContextListen
 			if (skey == null) {
 				throw new WorkflowException("ログインしていません。", HttpServletResponse.SC_UNAUTHORIZED,true);
 			}
-			ProcessInstanceManager mgr = sessionCache.get(skey);
-			if (mgr != null && mgr.session != null && mgr.session.validate()) {
+			
+			//TODO:修正中
+//			ProcessInstanceManager mgr = sessionCache.get(skey);
+//			if (mgr != null && mgr.session != null && mgr.session.validate()) {
+//				return mgr;
+//			}
+			//ProcessInstanceManager.Session s = sessionCache.get(skey);
+			
+			ProcessInstanceManager mgr = ProcessInstanceManager.getSession();
+			ProcessInstanceManager.Session session = sessionCache.get(skey);
+			if(session != null && session.validate())
 				return mgr;
-			}
+			
 			throw new WorkflowSessionException("ログインしていません。",HttpServletResponse.SC_UNAUTHORIZED, null, true);
 		} catch (Throwable t) {
 			throw new WorkflowSessionException("セションが無効です。",HttpServletResponse.SC_INTERNAL_SERVER_ERROR,null, true);
 		}
 	}
 	protected SessionData getSessionData() throws WorkflowSessionException{
-		ProcessInstanceManager mgr  = getSession();
-		SessionData s = new SessionData(mgr.session, request.getHeader(AUTH_HEADER), null, null);// context.getRealPath("data"));
+		//TODO:修正中
+		ProcessInstanceManager mgr  = ProcessInstanceManager.getSession();
+		//SessionData s = new SessionData(mgr.session, request.getHeader(AUTH_HEADER), null, null);// context.getRealPath("data"));
+		ProcessInstanceManager.Session session = sessionCache.get(request.getHeader(AUTH_HEADER));
+		SessionData s = new SessionData(session, request.getHeader(AUTH_HEADER), null, null);// context.getRealPath("data"));
+
 		return s;
 	}
 
@@ -308,11 +329,15 @@ public class WorkflowService extends Application implements ServletContextListen
 			enter();
 			String sv = server == null || server.length() == 0 ? this.server : server;
 			ProcessInstanceManager mgr = ProcessInstanceManager.getSession();
-			mgr.login(sv, userid, passwd, asAdmin);
+			
+			ProcessInstanceManager.Session session = mgr.login(sv, userid, passwd, asAdmin);
 			String skey = Util.random();
-			SessionData ret = new SessionData(mgr.session, skey, passwd, null);
-			newSession(skey, mgr);
-
+			//TODO: ProcessInstanceManagerがシングルトンなので、明らかにおかしくなるはずなのだが
+			//SessionData ret = new SessionData(mgr.session, skey, passwd, null);
+			sessionCache.put(skey, session);
+			SessionData ret = new SessionData(session, skey, passwd, null);
+			//newSession(skey, mgr);
+			logger.info("user " + userid + " logged in as " + skey);
 			return ret;
 		}catch(WorkflowException t){
 			throw t;
@@ -360,7 +385,8 @@ public class WorkflowService extends Application implements ServletContextListen
 			if(skey == null) throw new WorkflowException(HttpServletResponse.SC_BAD_REQUEST);
 			if(!sessionCache.containsKey(skey)) throw new WorkflowException("セションキーが無効です。", HttpServletResponse.SC_UNAUTHORIZED);
 			
-			ProcessInstanceManager.Session ws = sessionCache.get(skey).session;
+			//ProcessInstanceManager.Session ws = sessionCache.get(skey).session;
+			ProcessInstanceManager.Session ws = sessionCache.get(skey);
 			return new SessionData(ws, skey, null, null);//context.getRealPath("data"));
 		}catch(Throwable t){
 			throw new WorkflowException("ログインしていません。", HttpServletResponse.SC_UNAUTHORIZED, t);
@@ -386,7 +412,9 @@ public class WorkflowService extends Application implements ServletContextListen
 		String skey = request.getHeader(AUTH_HEADER);
 
 		if (skey != null && sessionCache.containsKey(skey)) {
-			ProcessInstanceManager mgr = sessionCache.get(skey);
+			//TODO:修正中
+			//ProcessInstanceManager mgr = sessionCache.get(skey);
+			ProcessInstanceManager mgr = ProcessInstanceManager.getSession();
 			sessionCache.remove(skey);
 			mgr.logout();
 		}
@@ -1515,11 +1543,16 @@ public class WorkflowService extends Application implements ServletContextListen
 		}
 	}
 
-	/**ログインユーザに新しいセションを割り当てる*/
+	/**ログインユーザに新しいセションを割り当てる
+	 * 
+	 * @deprecated
+	 * */
 	public static synchronized void newSession(final String skey, ProcessInstanceManager mgr) throws WorkflowException {
 		if (skey == null || skey.length() == 0 || mgr == null)
 			throw new WorkflowSessionException("セションの割り当てに失敗しました。");
-		sessionCache.put(skey, mgr);
+		//TODO:修正中
+		//sessionCache.put(skey, mgr);
+		
 	}
 
 	/**シナリオリソースを取得する
