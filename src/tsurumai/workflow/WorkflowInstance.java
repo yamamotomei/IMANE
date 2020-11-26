@@ -361,6 +361,13 @@ public class WorkflowInstance {
 		logger.info("abort:" +this.toString());
 		this.state = State.ABORTED;
 		
+		for(Timer tm : this.autoActionTimers) {
+			tm.cancel();
+		}
+		this.autoActionTimers.clear();
+		
+		this.worker.stop();
+		
 		logger.info("workflow aborted:" +this.toString());
 
 	}

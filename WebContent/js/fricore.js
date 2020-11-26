@@ -1196,8 +1196,15 @@ function updateWorkflowInfo(){
 	if(!FRICORE.wfsession){onOffline();error("ログインしていません。");return;}
 	doRequest(url, "GET", {})
 	.done(function(resp, msg, xhr){
+		var pidChanged = FRICORE.workflowstate && FRICORE.workflowstate.start && 
+			FRICORE.workflowstate.start != resp.start;
+
 		FRICORE.workflowstate = resp;
 		onOnline();
+
+		if(!FRICORE.usersession.isadmin && pidChanged)
+			restartSchenario();
+
 	})
 	.fail(function(xhr){
 //  コンソールログがうるさいので
@@ -1318,11 +1325,13 @@ function sortMembers(){
 	});
 	return ret;
 }
+
 function showActionDialog(type, tgt, toaddr){
 	if(!FRICORE.usersession){
 		dialog("ログインしていません。", "ok", "warning");
 		return;
 	}
+
 
 	var target = [];
 	var injection = FRICORE.isadmin;
@@ -2862,6 +2871,18 @@ function escape(str){
 	return _.escape(str);
 }
 
+
+function restartSchenario(){
+	if(FRICORE.usersession.isadmin)
+		return;
+	alert("演習が再スタートされました。イベントを更新するには「一覧更新」を押してください。")
+	window.localStorage.removeItem("kagi");
+	if(FRICORE && FRICORE.count){
+		FRICORE.count=[];
+	}
+}
+
+
 /**イベント受信/取得処理
  */
 //一覧更新用
@@ -2937,9 +2958,10 @@ function onLoadEvent(data, showHidden){
 	
 	if(cards && cards.length != 0){//ステートカードGET
 		_.each(cards, function(i){
+			
 			var org=_.findWhere(FRICORE.states, {id:i});
 			var current=_.findWhere(FRICORE.availableStates, {id:i});
-			if(!current){
+			if(!current){	
 				if(org){
 					console.log('新しいステートカードを獲得:' + org.name);
 					FRICORE.availableStates.push(org);

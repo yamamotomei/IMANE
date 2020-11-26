@@ -1574,4 +1574,14 @@ public class WorkflowService extends Application implements ServletContextListen
 			throw new WorkflowException("リソースが読み込めません:" + name, HttpServletResponse.SC_BAD_REQUEST, t);
 		}
 	}
+	
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+		ServletContextListener.super.contextDestroyed(sce);
+		
+		for(WorkflowInstance wf : workflow) {
+			wf.abort();
+		}
+		
+	}
 }
