@@ -47,7 +47,7 @@
   - [IMANE-PCサーバー環境構築と演習開始方法](https://drive.google.com/file/d/1g_2clxpkU8UtCgrSM63hIYKnH7hDyE-j/view?usp=sharing)
 
 - 操作の流れについてはついてはIMANE-PCの操作説明のPDFを参照してください
-  - [IMANE-PCの操作説明](https://drive.google.com/file/d/1g_2clxpkU8UtCgrSM63hIYKnH7hDyE-j/view?usp=sharing)
+  - [IMANE-PCの操作説明](https://drive.google.com/file/d/1cHsT7w-BvoI9WSXi1ZQGjmmHKsY5d70Q/view?usp=sharing)
 
 - 同梱されてる演習シナリオについてはシナリオ概要のPDFを参照してください
   - [シナリオ概要](https://drive.google.com/file/d/1cMO9Nqt-RyStZ5-CS1KRWjsVoH2MdvkT/view?usp=sharing)
