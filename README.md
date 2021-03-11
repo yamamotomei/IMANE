@@ -28,7 +28,7 @@
 - Tomcatのインストールとworkshop.jarの配備
   - Apache Tomcatをインストール
     - http://tomcat.apache.org/
-  - apache-tomcat-x.x.xx\webapps内にworkshop.jarを配備する
+  - apache-tomcat-x.x.xx\webapps内にworkshop.warを配備する
 
 - サーバーの起動
   1. Tomcatを起動
