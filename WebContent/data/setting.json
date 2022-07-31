@@ -1,8 +1,9 @@
 {
   "teams":[
-    {"id":"SampleCompany.com","name":"SampleCompany"}
+    {"id":"COE.com","name":"COE_4th_term"}
   ],
   "phases":[
-    {"phase":1,"description":"phase1","timelimit":1200,"endstate":[]}
+    {"phase":1,"description":"phase1","timelimit":1200,"endstate":[10010002]},
+    {"phase":2,"description":"phase2","timelimit":1200,"endstate":[]}
   ]
 }
