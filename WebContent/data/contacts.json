@@ -8,7 +8,7 @@
        "team":"COE.com",
        "desc":"",
        "recipients":["Auto","Manual"],
-       "system": [true,true,true]
+       "system": [true]
      },
      {
        "name":"Auto",
@@ -18,7 +18,7 @@
        "team":"COE.com",
        "desc":"",
        "recipients":["Auto","Manual"],
-       "system": [true,true,true]
+       "system": [true]
      },
      {
        "name":"Manual",
@@ -28,7 +28,7 @@
        "team":"COE.com",
        "desc":"",
        "recipients":["Auto","Manual"],
-       "system": [false,false,false]
+       "system": [false]
      },
     {
        "name":"演習ファシリテータ",
@@ -36,7 +36,7 @@
        "rolename":"facilitator",
        "email":"facilitator@COE.com",
        "team":"COE.com",
-       "system": [false,false,false],
+       "system": [false],
        "recipients": ["all"],
        "isadmin": true
     }

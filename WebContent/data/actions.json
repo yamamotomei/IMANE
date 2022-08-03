@@ -4,8 +4,8 @@
        "type":"auto",
        "name":"アクション１",
        "message":"アクション１",
-       "systemstatecondition": ["10040005"],
-       "delay": 3,
+       "systemstatecondition": ["10040004"],
+       "delay": 30,
        "from":"Auto",
        "to":"Manual",
        "attachments": ["20010001"],
@@ -16,9 +16,8 @@
        "name":"アクション３",
        "message":"アクション３",
        "systemstatecondition": ["10040003"],
-       "delay": 3,
        "from":"Auto",
-       "to":"Manual",
+       "to":"Auto",
        "attachments": ["20010002"],
        "id":"A00002"
     },
@@ -28,17 +27,8 @@
        "message":"アクション２",
        "attachments": ["20040003"],
        "roles": ["Manual"],
-       "statecondition": ["20010001"],
+       "statecondition": ["20040004"],
        "id":"A00003"
-    },
-    {
-       "type":"action",
-       "name":"アクション４",
-       "message":"アクション４",
-       "attachments": ["20040004"],
-       "roles": ["Manual"],
-       "statecondition": ["20010002"],
-       "id":"A00004"
     },
     {
        "name":"通知",

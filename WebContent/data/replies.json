@@ -14,16 +14,25 @@
      {
        "type":"hidden",
        "addstate": ["10010002"],
-       "to":"Manual",
+       "to":"Auto",
        "name":"",
        "message":"",
        "actionid":"A00002"
      },
      {
-       "type":"hidden",
+       "type":"",
+       "statecondition":["10010001"],
        "addstate": ["10040003"],
        "to":"Auto",
-       "name":"",
+       "name":"正常",
+       "message":"",
+       "actionid":"A00003"
+     },
+     {
+       "type":"",
+       "statecondition":["NOT(10010001)"],
+       "to":"Auto",
+       "name":"正常",
        "message":"",
        "actionid":"A00003"
      },
@@ -31,10 +40,10 @@
        "actionid":"s0000",
        "name": "演習開始",
        "message": "演習を開始します。",
-       "addstate": ["10040005"],
+       "addstate": ["10040004"],
        "from":"Manual",
        "to":"all",
-       "state":"20040005",
+       "state":"20040004",
        "elapsed": 3
      },
      {
@@ -65,45 +74,6 @@
         "text":"えっ、なんですか。"
      }
    ]
-  },
-
-
-  {
-   "phase":"2",
-    "reply": [
-     {
-       "type":"hidden",
-       "addstate": ["10040004"],
-       "to":"Auto",
-       "name":"",
-       "message":"",
-       "actionid":"A00004"
-     },
-     {
-       "actionid":"all",
-       "to": "all",
-       "name": "こちらの対応範囲外です。別のところにお問い合わせ下さい。",
-       "delay":5,
-       "abort": true,
-       "type":"notfound"
-     },
-     {
-       "actionid":"all",
-       "to": "all",
-       "name":"空の応答",
-       "type":"null",
-       "delay": 0,
-       "abort":true
-     }
-   ],
-   "message":[
-     {
-        "actionid":"8000",
-        "text":"えっ、なんですか。"
-     }
-   ]
   }
-
-
  ]
 }
